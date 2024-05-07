@@ -1,5 +1,7 @@
 
 import 'package:circlet/components/components.dart';
+import 'package:circlet/screen/login_register/id_search_page.dart';
+import 'package:circlet/screen/login_register/password_search_page.dart';
 import 'package:circlet/screen/login_register/register_page1.dart';
 import 'package:circlet/screen/main/study_search_page.dart';
 import 'package:circlet/util/color.dart';
@@ -17,13 +19,14 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController idController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool passwordVisible = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.only(top: 100, left: 10, right: 10),
+        padding: const EdgeInsets.only(top: 100, left: 12, right: 12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -38,67 +41,47 @@ class _LoginPageState extends State<LoginPage> {
           const SizedBox(
             height: 50,
           ),
-          Text('회원가입', style: f15bw500,),
-          Container(
-            height: 55,
-            child: TextFormField(
-              decoration: InputDecoration(
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(6),
-                  borderSide: BorderSide(
-                      color: Color(0xff282828)
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(6),
-                    borderSide: BorderSide(color: Color(0xff3648EB))
-                ),
-                hintText: '아이디를 입력해 주세요.',
-                hintStyle: f14w300HintGray,
-              ),
-              style: TextStyle(
-                  color: Colors.black,
-              ),
-              controller: idController,
-              onChanged: (v){
+          Text('이메일', style: f15bw500,),
+          const SizedBox(
+            height: 6,
+          ),
+          TextFormBox(
+              hintText: '이메일을 입력하세요',
+              textController: emailController,
+              onTap: (){},
+              onChange: (v){
                 setState(() {
                 });
-              },
-            ),
-          ),
+              }),
           const SizedBox(
-            height: 15,
+            height: 10,
           ),
           Text('비밀번호', style: f15bw500,),
-          Container(
-            height: 55,
-            child: TextFormField(
-              decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(6),
-                    borderSide: BorderSide(
-                        color: Color(0xff1F2D37)
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(6),
-                      borderSide: BorderSide(color: Color(0xff3648EB))
-                  ),
-                  hintText: '비밀번호를 입력해 주세요.',
-                  hintStyle: f14w300HintGray,
-              ),
-              style: TextStyle(
-                  color: Colors.black
-              ),
-              controller: passwordController,
-              onChanged: (v){
-                setState(() {
-                });
-              },
-            ),
+          const SizedBox(
+            height: 6,
+          ),
+          suffixTextFormBox(
+            hintText: '비번번호를 입력하세요',
+            textController: passwordController,
+            onTap: (){},
+            isIcon: true,
+            visible: passwordVisible,
+            onpressed: (){
+              print('11');
+              passwordVisible = !passwordVisible;
+              setState(() {});
+            },
+            onChange: (v){
+              setState(() {
+
+              });
+            },
+            isContainer: true,
+            textStyle: f14w300,
+            backgroundColor: mainColor,
           ),
           const SizedBox(
-            height: 20,
+            height: 30,
           ),
           GestureDetector(
             onTap: (){
@@ -123,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           const SizedBox(
-            height: 18,
+            height: 12,
           ),
           GestureDetector(
             onTap: (){
@@ -150,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           const SizedBox(
-            height: 30,
+            height: 60,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -163,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding:  EdgeInsets.symmetric(horizontal: 15),
                 child: Text(
-                  'sns로 1초만에 로그인',
+                  '간편로그인',
                   style: TextStyle(
                     fontSize: 15,
                     color: Color(0xff909090),
@@ -208,17 +191,33 @@ class _LoginPageState extends State<LoginPage> {
           const SizedBox(
             height: 10,
           ),
-          Center(
-            child: GestureDetector(
-              onTap: (){
-                setState(() {
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: (){
+                  Get.to(IdSearchPage());
+                  setState(() {
 
-                });
-              },
-              child: Text('아이디/비밀번호 찾기',style: TextStyle(
-                fontSize: 15, fontWeight: FontWeight.bold
-              ),),
-            ),
+                  });
+                },
+                child: Text('아이디 찾기',style: TextStyle(
+                    fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'NotoSans',color: Color(0xff1F2D37)
+                ),),
+              ),
+              Text(' | '),
+              GestureDetector(
+                onTap: (){
+                  Get.to(PasswordSearchPage());
+                  setState(() {
+
+                  });
+                },
+                child: Text('비밀번호 찾기',style: TextStyle(
+                    fontSize: 15, fontWeight: FontWeight.w500, fontFamily: 'NotoSans',color: Color(0xff1F2D37)
+                ),),
+              ),
+            ],
           )
         ],
         ),
