@@ -46,7 +46,7 @@ class _CreatePageState extends State<CreatePage> {
                   padding: EdgeInsets.only(right: 27),
                   child: GestureDetector(
                     onTap: () {
-                      print('카테고리 선택');
+                      print('카테고리 선택11');
                     },
                     child: SvgPicture.asset('assets/icon/category.svg'),
                   ),
