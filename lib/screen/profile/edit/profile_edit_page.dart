@@ -1,4 +1,4 @@
-import 'package:circlet/screen/profile/setting/edit_interest_page.dart';
+import 'package:circlet/screen/profile/edit/edit_interest_page.dart';
 import 'package:circlet/util/color.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

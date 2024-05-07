@@ -1,6 +1,13 @@
 
 import 'package:circlet/firebase/firebase_test.dart';
-import 'package:circlet/screen/login_register/login_page.dart';
+import 'package:circlet/screen/login_register/Interest_page.dart';
+import 'package:circlet/screen/login_register/add_github_page.dart';
+import 'package:circlet/screen/login_register/add_portfolio_page.dart';
+import 'package:circlet/screen/login_register/login/login_page.dart';
+import 'package:circlet/screen/login_register/id_password_search/password_reset_page.dart';
+import 'package:circlet/screen/login_register/register/register_page2.dart';
+import 'package:circlet/screen/login_register/tech_stack_page.dart';
+import 'package:circlet/screen/profile/setting/profile_setting_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -38,7 +45,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const LoginPage(),
+      home: const ProfileSettingPage(),
     );
   }
 }

@@ -1,8 +1,8 @@
 
 import 'package:circlet/components/components.dart';
-import 'package:circlet/screen/login_register/id_search_page.dart';
-import 'package:circlet/screen/login_register/password_search_page.dart';
-import 'package:circlet/screen/login_register/register_page1.dart';
+import 'package:circlet/screen/login_register/id_password_search/id_search_page.dart';
+import 'package:circlet/screen/login_register/id_password_search/password_search_page.dart';
+import 'package:circlet/screen/login_register/register/register_page1.dart';
 import 'package:circlet/screen/main/study_search_page.dart';
 import 'package:circlet/util/color.dart';
 import 'package:circlet/util/font/font.dart';

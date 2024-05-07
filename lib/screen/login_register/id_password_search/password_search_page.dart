@@ -1,10 +1,10 @@
-import 'package:circlet/screen/login_register/password_reset_page.dart';
+import 'package:circlet/screen/login_register/id_password_search/password_reset_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
-import '../../components/components.dart';
-import '../../util/font/font.dart';
+import '../../../components/components.dart';
+import '../../../util/font/font.dart';
 
 class PasswordSearchPage extends StatefulWidget {
   const PasswordSearchPage({super.key});

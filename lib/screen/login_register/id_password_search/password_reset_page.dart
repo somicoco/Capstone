@@ -1,11 +1,11 @@
-import 'package:circlet/screen/login_register/login_page.dart';
+import 'package:circlet/screen/login_register/login/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
-import '../../components/components.dart';
-import '../../util/color.dart';
-import '../../util/font/font.dart';
+import '../../../components/components.dart';
+import '../../../util/color.dart';
+import '../../../util/font/font.dart';
 
 class PasswordResetPage extends StatefulWidget {
   const PasswordResetPage({super.key});

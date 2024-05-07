@@ -1,13 +1,13 @@
 
 import 'package:circlet/components/components.dart';
-import 'package:circlet/screen/login_register/register_page2.dart';
+import 'package:circlet/screen/login_register/register/register_page2.dart';
 import 'package:circlet/util/color.dart';
 import 'package:circlet/util/font/font.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
-import 'login_page.dart';
+import '../login/login_page.dart';
 
 
 
