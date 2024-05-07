@@ -1,9 +1,12 @@
 import 'package:circlet/components/components.dart';
+import 'package:circlet/screen/login_register/Interest_page.dart';
+import 'package:circlet/util/color.dart';
+import 'package:circlet/util/font/font.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
-import 'login_page.dart';
+import '../login/login_page.dart';
 
 class RegisterPage2 extends StatefulWidget {
   const RegisterPage2({super.key});
@@ -17,21 +20,21 @@ class _RegisterPage2State extends State<RegisterPage2> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController checkPasswordController = TextEditingController();
   TextEditingController nickNameController = TextEditingController();
-  String validatePasswordText = '*8자이상이면서 최소한 특수기호 하나를 포함해야합니다.'; ///비밀번호 유효성 검사 Text
+  String validatePasswordText = '*비밀번호는 8~32 자의 영문, 숫자, 특수문자를 조합하여 설정해 주세요.'; ///비밀번호 유효성 검사 Text
   String validateEmailText = ''; ///이메일 유효성 검사 Text
   String validateNicknameText = ''; ///닉네임 유효성 검사 Text
 
   bool isEmailValid = false; ///이메일 유효성 검사 여부
   bool isPasswordValid = false;///비밀번호 유효성 검사 여부
   bool isNicknameValid = false;///닉네임 유효성 검사 여부
+
+  bool visible = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('회원가입',
-          style: TextStyle(
-            fontSize: 22,
-          ),),
+          style: f22bw500,),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(1), // Divider의 높이 설정
           child: Divider(
@@ -48,53 +51,79 @@ class _RegisterPage2State extends State<RegisterPage2> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text('이메일', style: TextStyle(fontSize: 17,),),
-            TextFormBox(hintText: '이메일을 입력해주세요.',
-                textController: emailController,
-                onTap: (){},
-                onTap2: (v){
-                  isEmailValid = validateEmail(v);
-                  setState(() {
-                    validateEmailText = isEmailValid? '사용가능한 이메일 입니다.': emailController.text == '' ? '':'올바른 이메일 형식으로 입력해주세요.';
-                  });
-                }),
-            Text('$validateEmailText', style: TextStyle(fontSize: 12, color: isEmailValid?Color(0xff0DD675):Colors.red),),
+            suffixTextFormBox(
+              hintText: '이메일을 입력해주세요',
+              textController: emailController,
+              onTap: (){print(isEmailValid);},
+              onChange: (v){
+                isEmailValid = validateEmail(v);
+                setState(() {
+                  validateEmailText = isEmailValid?'':'이메일 형식으로 입력해주세요.';
+
+                });
+              },
+              isContainer: true,
+              containerText: '중복체크',
+              textStyle: f14w300,
+              backgroundColor: mainColor,
+            ),
+            Text(validateEmailText, style: TextStyle(fontSize: 12, color: isEmailValid?Color(0xff0DD675):Colors.red),),
             Text('비밀번호', style: TextStyle(fontSize: 17,),),
             TextFormBox(hintText: '비밀번호를 입력해주세요.',
                 textController: passwordController,
                 onTap: (){},
-                onTap2: (v){
+                onChange: (v){
                   isPasswordValid = validatePassword(v)?checkPasswordController.text==passwordController.text?true:false:false;
                   setState(() {
-                    validatePasswordText = isPasswordValid?'사용가능한 비밀번호 입니다.': '*8자이상이면서 최소한 특수기호 하나를 포함해야합니다.';
+                    validatePasswordText = isPasswordValid?'사용가능한 비밀번호 입니다.': '*비밀번호는 8~32 자의 영문, 숫자, 특수문자를 조합하여 설정해 주세요.';
                   });
                 }),
+            const SizedBox(
+              height: 13,
+            ),
             Text('비밀번호 확인', style: TextStyle(fontSize: 17,),),
             TextFormBox(hintText: '비밀번호를 입력해주세요.',
                 textController: checkPasswordController,
                 onTap: (){},
-                onTap2: (v){
+                onChange: (v){
                   isPasswordValid = validatePassword(v)?checkPasswordController.text==passwordController.text?true:false:false;
                   setState(() {
-                    validatePasswordText = isPasswordValid?'사용가능한 비밀번호 입니다.': '*8자이상이면서 최소한 특수기호 하나를 포함해야합니다.';
+                    validatePasswordText = isPasswordValid?'사용가능한 비밀번호 입니다.': '*비밀번호는 8~32 자의 영문, 숫자, 특수문자를 조합하여 설정해 주세요.';
                   });
                 }),
+            const SizedBox(
+              height: 8,
+            ),
             Text(validatePasswordText, style: TextStyle(fontSize: 12,color: isPasswordValid?Color(0xff0DD675):Color(0xffABABAB)),),
+            const SizedBox(
+              height: 13,
+            ),
             Text('닉네임', style: TextStyle(fontSize: 17,),),
-            TextFormBox(hintText: '닉네임을 입력해주세요.',
-                textController: nickNameController,
-                onTap: (){},
-                onTap2: (v){
-                  isNicknameValid = validateNickname(v);
-                  setState(() {
-                    validateNicknameText = isNicknameValid? '사용가능한 닉네임 입니다.': nickNameController.text == '' ? '':'닉네임은 2글자 이상이면서 8글자여야합니다.';
-                  });
-                }),
+            suffixTextFormBox(
+              hintText: '닉네임을 입력해주세요',
+              textController: nickNameController,
+              onTap: (){print(isNicknameValid);},
+              onChange: (v){
+                isNicknameValid = validateNickname(v);
+                setState(() {
+                  validateNicknameText = isNicknameValid?'':'닉네임은 2자이상 8자이하의 형식으로 입력해주세요.';
+
+                });
+              },
+              isContainer: true,
+              containerText: '중복체크',
+              textStyle: f14w300,
+              backgroundColor: mainColor,
+            ),
             Text(validateNicknameText, style: TextStyle(fontSize: 12,color: isNicknameValid?Color(0xff0DD675):Color(0xffABABAB)),),
+
+
+
             Spacer(),
             GestureDetector(
               onTap: (){
                 setState(() {
-                  isNicknameValid&&isPasswordValid&&isEmailValid? '': Get.to(LoginPage());
+                  isNicknameValid&&isPasswordValid&&isEmailValid? '': Get.to(InterestPage());
 
                 });
 
@@ -107,7 +136,7 @@ class _RegisterPage2State extends State<RegisterPage2> {
                 ),
                 child: Center( // 텍스트를 가운데에 위치시키기 위해 Center 위젯 추가
                   child: Text(
-                    '다음',
+                    '회원가입',
                     style: TextStyle(
                         color: isNicknameValid&&isPasswordValid&&isEmailValid? Color(0xffFFFFFF):Color(0xffABABAB)
                         ,fontSize: 18),
@@ -137,10 +166,10 @@ bool validateEmail(String value) {
   return regExp.hasMatch(value);
 }
 
-/// 비밀번호 유효성검사 8자리 이상 15자리 이하 특수문자 포함
+/// 비밀번호 유효성검사 8자리 이상 32자리 이하 특수문자 포함
 bool validatePassword(String password) {
   // 비밀번호 유효성 검사에 사용할 정규식
-  String pattern = r'^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,15}$';
+  String pattern = r'^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,32}$';
 
   RegExp regExp = RegExp(pattern);
   return regExp.hasMatch(password);
