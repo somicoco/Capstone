@@ -1,13 +1,16 @@
 
 import 'package:circlet/firebase/firebase_test.dart';
 import 'package:circlet/screen/login_register/login_page.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:circlet/screen/login_register/test.dart';
+import 'package:circlet/screen/post/create_page.dart';
+import 'package:circlet/screen/post/view_page.dart';
+//import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  //await Firebase.initializeApp();
   print('-- main: Firebase.initializeApp');
   runApp(MyApp());
 }
@@ -38,7 +41,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const LoginPage(),
+      home: ViewPage(),
     );
   }
 }
