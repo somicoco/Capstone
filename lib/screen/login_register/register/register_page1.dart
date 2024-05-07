@@ -1,11 +1,13 @@
 
 import 'package:circlet/components/components.dart';
-import 'package:circlet/screen/login_register/register_page2.dart';
+import 'package:circlet/screen/login_register/register/register_page2.dart';
+import 'package:circlet/util/color.dart';
+import 'package:circlet/util/font/font.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
-import 'login_page.dart';
+import '../login/login_page.dart';
 
 
 
@@ -43,67 +45,38 @@ class _RegisterPage1State extends State<RegisterPage1> {
           ),
         ),
         body: Padding(
-          padding: const EdgeInsets.only(top: 20, left: 12, right: 12,bottom: 120),
+          padding: const EdgeInsets.only(top: 13, left: 13, right: 13,bottom: 120),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text('가입시 입력한 휴대폰 번호',
-                style: TextStyle(
-                    fontSize: 16
-                ),
+              Text('핸드폰 인증',
+                style: f17bw500,
               ),
-              TextFormField(
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(6),
-                    borderSide: BorderSide(
-                        color: Color(0xffEBEBEB)
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(6),
-                      borderSide: BorderSide(color: Color(0xff3648EB))
-                  ),
-                  contentPadding: EdgeInsets.only(top: 15,bottom: 15,left: 10,right: 10),
-                  hintText: '휴대전화 (-없이)',
-                  hintStyle: TextStyle(fontSize: 14, color: Color(0xff6E6E6E)),
-                  suffixIcon: Padding(
-                    padding: const EdgeInsets.only(left: 12,right: 12,top: 9,bottom: 9),
-                    child: GestureDetector(
-                      onTap: (){
-                        print('1111');
-                      },
-                      child: Container(
-                        width: 70,
-                        decoration: BoxDecoration(
-                            color: Color(0xffF3F3F3),
-                            borderRadius: BorderRadius.circular(5)
-                        ),
-                        child: Center(child: Text('인증요청')),
-                      ),
-                    ),
-                  ),
-                ),
-                style: TextStyle(
-                  color: Color(0xff6E6E6E),
-                ),
-                controller: phoneController,
-
-                onChanged: (v){
+              const SizedBox(height: 17,),
+              suffixTextFormBox(
+                hintText: '휴대전화(-없이)',
+                textController: phoneController,
+                onTap: (){},
+                onChange: (v){
                   setState(() {
                   });
                 },
+                isContainer: true,
+                containerText: '인증요청',
+                textStyle: f14bw300,
+                backgroundColor: Color(0xffF3F3F3),
               ),
-              const SizedBox(height: 10,),
+              const SizedBox(height: 15,),
               TextFormBox(hintText: '인증번호를 입력해주세요',
                   textController: certController,
                   onTap: (){},
-                  onTap2: (v){
+                  onChange: (v){
                     setState(() {
                       certCheck = certController.text == checkNum? true : false;
                     });
                   }),
+              const SizedBox(height: 9,),
               Text('*본인명의 핸드폰번호를 정확히 입력해 주시기 바랍니다.',
                 style: TextStyle(
                   fontSize: 12,
