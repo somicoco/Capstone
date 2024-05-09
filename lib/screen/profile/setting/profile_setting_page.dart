@@ -38,7 +38,7 @@ class _ProfileSettingPageState extends State<ProfileSettingPage> {
           children: [
             GestureDetector(
               onTap: (){
-                Get.to(()=>ProfileEditPage());
+                //Get.to(()=>ProfileEditPage());
               },
               child: Row(
                 children: [
