@@ -35,6 +35,7 @@ class _LoungePageState extends State<LoungePage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    _LoungePageTabController.dispose();
     super.dispose();
   }
 

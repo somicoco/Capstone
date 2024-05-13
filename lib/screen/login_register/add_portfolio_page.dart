@@ -94,7 +94,7 @@ class _AddPortFolioPageState extends State<AddPortFolioPage> {
             ),
             GestureDetector(
               onTap: () {
-                Get.to(StudySearchPage());
+                Get.to(TestSearchPage());
                 setState(() {
 
                 });

@@ -41,6 +41,14 @@ const TextStyle f17bw300 = TextStyle(
 );
 
 ///Medium
+
+const TextStyle f10dgw500 = TextStyle(
+    fontSize: 10,
+    color: deepgrayColor,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'NotoSans'
+);
+
 const TextStyle f12bw500 = TextStyle(
     fontSize: 12,
     color: blackColor,
@@ -72,6 +80,9 @@ const TextStyle f17bw500 = TextStyle(
     fontWeight: FontWeight.w500,
     fontFamily: 'NotoSans'
 );
+
+
+
 const TextStyle f20gw500 = TextStyle(
     fontSize: 20,
     color: grayColor,
@@ -109,6 +120,20 @@ const TextStyle f24w500 = TextStyle(
     fontFamily: 'NotoSans'
 );
 ///Bold
+const TextStyle f9bw700 = TextStyle(
+    fontSize: 9,
+    color: blackColor,
+    fontWeight: FontWeight.w700,
+    fontFamily: 'NotoSans'
+);
+
+const TextStyle f18bw700 = TextStyle(
+    fontSize: 18,
+    color: blackColor,
+    fontWeight: FontWeight.w700,
+    fontFamily: 'NotoSans'
+);
+
 const TextStyle f20bw700 = TextStyle(
     fontSize: 20,
     color: blackColor,

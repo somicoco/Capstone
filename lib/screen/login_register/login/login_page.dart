@@ -86,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
           GestureDetector(
             onTap: (){
               setState(() {
-                Get.to(StudySearchPage());
+                Get.to(TestSearchPage());
 
               });
             },
