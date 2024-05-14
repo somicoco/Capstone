@@ -41,10 +41,28 @@ const TextStyle f17bw300 = TextStyle(
 );
 
 ///Medium
-
+const TextStyle f8gw500 = TextStyle(
+    fontSize: 8,
+    color: grayColor,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'NotoSans'
+);
+const TextStyle f10gw500 = TextStyle(
+    fontSize: 10,
+    color: grayColor,
+    fontWeight: FontWeight.w300,
+    fontFamily: 'NotoSans'
+);
 const TextStyle f10dgw500 = TextStyle(
     fontSize: 10,
     color: deepgrayColor,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'NotoSans'
+);
+
+const TextStyle f12hgw500 = TextStyle(
+    fontSize: 12,
+    color: hintGrayColor,
     fontWeight: FontWeight.w500,
     fontFamily: 'NotoSans'
 );
@@ -55,6 +73,8 @@ const TextStyle f12bw500 = TextStyle(
     fontWeight: FontWeight.w500,
     fontFamily: 'NotoSans'
 );
+
+
 const TextStyle f15bw500 = TextStyle(
     fontSize: 15,
     color: blackColor,
@@ -120,8 +140,34 @@ const TextStyle f24w500 = TextStyle(
     fontFamily: 'NotoSans'
 );
 ///Bold
+const TextStyle f8ww700 = TextStyle(
+    fontSize: 8,
+    color: whiteColor,
+    fontWeight: FontWeight.w700,
+    fontFamily: 'NotoSans'
+);
 const TextStyle f9bw700 = TextStyle(
     fontSize: 9,
+    color: blackColor,
+    fontWeight: FontWeight.w700,
+    fontFamily: 'NotoSans'
+);
+const TextStyle f10ww700 = TextStyle(
+    fontSize: 10,
+    color: whiteColor,
+    fontWeight: FontWeight.w700,
+    fontFamily: 'NotoSans'
+);
+
+const TextStyle f12bw700 = TextStyle(
+    fontSize: 12,
+    color: blackColor,
+    fontWeight: FontWeight.w700,
+    fontFamily: 'NotoSans'
+);
+
+const TextStyle f15bw700 = TextStyle(
+    fontSize: 15,
     color: blackColor,
     fontWeight: FontWeight.w700,
     fontFamily: 'NotoSans'
@@ -137,6 +183,13 @@ const TextStyle f18bw700 = TextStyle(
 const TextStyle f20bw700 = TextStyle(
     fontSize: 20,
     color: blackColor,
+    fontWeight: FontWeight.w700,
+    fontFamily: 'NotoSans'
+);
+
+const TextStyle f20ww700 = TextStyle(
+    fontSize: 20,
+    color: whiteColor,
     fontWeight: FontWeight.w700,
     fontFamily: 'NotoSans'
 );
