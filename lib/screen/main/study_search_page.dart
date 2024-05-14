@@ -3,20 +3,20 @@ import 'package:flutter/material.dart';
 
 
 
-class StudySearchPage extends StatefulWidget {
-  const StudySearchPage({super.key});
+class TestSearchPage extends StatefulWidget {
+  const TestSearchPage({super.key});
 
   @override
-  State<StudySearchPage> createState() => _StudySearchPageState();
+  State<TestSearchPage> createState() => _TestSearchPageState();
 }
 
-class _StudySearchPageState extends State<StudySearchPage> {
+class _TestSearchPageState extends State<TestSearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('DevLinkUp1'),
+        title: Text('DevLinkUp1233444'),
       ),
       body: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
