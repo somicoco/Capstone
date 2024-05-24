@@ -1,3 +1,6 @@
+import 'package:circlet/components/components.dart';
+import 'package:circlet/util/font/font.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 // 글씨체 변경해야함
@@ -49,14 +52,14 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
+      body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
                 Stack(children: [
                   Padding(
-                    padding: EdgeInsets.only(left: 27, top: 11),
+                    padding: EdgeInsets.only(left: 25, top: 15),
                     child: Container(
                       decoration: BoxDecoration(shape: BoxShape.circle),
                       child: ClipRRect(
@@ -69,7 +72,7 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
                       print('사진 수정 클릭');
                     },
                     child: Container(
-                      margin: EdgeInsets.only(left: 85, top: 63),
+                      margin: EdgeInsets.only(left: 65, top: 63),
                       width: 25,
                       height: 25,
                       child: SvgPicture.asset('assets/icon/modify2.svg',
@@ -78,43 +81,45 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
                   )
                 ]),
                 SizedBox(
-                  width: 25,
+                  width: 15,
                 ),
-                Text(
+                Padding(padding: EdgeInsets.only(top: 20),
+                child: Text(
                   '둘리',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                )
+                  style: f20bw700,
+                ))
               ],
             ),
             Padding(
-              padding: EdgeInsets.only(right: 25, top: 10),
+              padding: EdgeInsets.only(left: 20,right: 25, top: 20),
               child: Text(
-                  '관심있는 취미들을 깊게 더 나눠보고 싶어요. \n새로운 사람들과 함께 다채로운 경험을 쌓고싶어요.'),
+                  '관심있는 취미들을 깊게 더 나눠보고 싶어요. \n새로운 사람들과 함께 다채로운 경험을 쌓고싶어요.',style: f13bw500,),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 45, right: 20, top: 8),
+              padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 10),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
                     child: Column(
-                      children: [Text('좋아요'), Text('33')],
+                      children: [Text('좋아요', style: f13bw500), Text('33', style: f13bw500)],
                     ),
                   ),
-                  const SizedBox(width: 41),
+                  const SizedBox(width: 40),
                   Container(
                     child: Column(
-                      children: [Text('게시글'), Text('33')],
+                      children: [Text('게시글', style: f13bw500,), Text('33', style: f13bw500)],
                     ),
                   ),
-                  const SizedBox(width: 41),
+                  const SizedBox(width: 40),
                   Container(
                     child: Column(
-                      children: [Text('참여도'), Text('33')],
+                      children: [Text('참여도', style: f13bw500), Text('33', style: f13bw500)],
                     ),
                   ),
                   Spacer(),
                   Padding(
-                    padding: EdgeInsets.only(right: 10),
+                    padding: EdgeInsets.only(right: 5),
                     child: GestureDetector(
                       onTap: () {
                         print('일대일 채팅');
@@ -128,7 +133,7 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
                           child: Center(
                             child: Text(
                               '1:1 채팅',
-                              style: TextStyle(color: Colors.white),
+                              style: f14w700,
                             ),
                           )),
                     ),
@@ -136,17 +141,24 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
                 ],
               ),
             ),
-            const SizedBox(height: 10),
-            TabBar(
-              indicatorSize: TabBarIndicatorSize.tab,
-              indicatorPadding: EdgeInsets.symmetric(horizontal: 24),
-              controller: _UserProfilePageTabController,
-              tabs: [Tab(text: '정보'), Tab(text: '라운지'), Tab(text: '스터디그룹')],
+            const SizedBox(height: 5),
+            DecoratedTabBar(
+              tabBar: TabBar(
+                indicatorColor: Colors.black,
+                indicatorSize: TabBarIndicatorSize.tab,
+                indicatorPadding: EdgeInsets.symmetric(horizontal: 24), //여백으로 인해 tab사이즈보다 작아짐
+                controller: _UserProfilePageTabController,
+                labelStyle: f15bw500,
+                tabs: [Tab(text: '정보',), Tab(text: '라운지'), Tab(text: '스터디그룹')],
+              ),
+              decoration: BoxDecoration(
+                border: Border(bottom: BorderSide(color: Color(0xffDBDBDB)))
+              ),
             ),
             const SizedBox(height: 5),
-            SizedBox(
-              height: 300,
+            Expanded(
               child: TabBarView(
+                physics: BouncingScrollPhysics(), // 스크롤 physics 아무것도 안 나오게
                 controller: _UserProfilePageTabController,
                 children: [
                   SingleChildScrollView(
@@ -156,8 +168,8 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
                           padding: EdgeInsets.only(left: 16, top: 15),
                           child: Row(
                             children: [
-                              Text('관심분야'),
-                              const SizedBox(width: 35),
+                              Text('관심분야', style: f15bw500),
+                              const SizedBox(width: 20),
                               Container(
                                 width: 40,
                                 height: 20,
@@ -191,21 +203,22 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(left: 16, top: 40),
+                          padding: EdgeInsets.only(left: 16, top: 20),
                           child: Row(
                             children: [
-                              Text('기술스텍'),
-                              const SizedBox(width: 35),
+                              Text('기술스텍', style: f15bw500),
+                              const SizedBox(width: 20),
                               Container(
                                 width: 54,
                                 height: 20,
+                                alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(30),
                                     color: Colors.black),
                                 child: Center(
                                   child: Text(
                                     '플러터',
-                                    style: TextStyle(color: Colors.white),
+                                    style: f12w500,
                                   ),
                                 ),
                               ),
@@ -213,13 +226,14 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
                               Container(
                                 width: 54,
                                 height: 20,
+                                alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(30),
                                     color: Colors.black),
                                 child: Center(
                                   child: Text(
                                     'Java',
-                                    style: TextStyle(color: Colors.white),
+                                    style: f12w500,
                                   ),
                                 ),
                               ),
@@ -227,13 +241,14 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
                               Container(
                                 width: 54,
                                 height: 20,
+                                alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(30),
                                     color: Colors.black),
                                 child: Center(
                                   child: Text(
                                     'Node.js',
-                                    style: TextStyle(color: Colors.white),
+                                    style: f12w500,
                                   ),
                                 ),
                               ),
@@ -243,88 +258,71 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(left: 16, top: 40),
+                          padding: EdgeInsets.only(left: 16, top: 20),
                           child: Row(
                             children: [
-                              Text('깃허브'),
+                              Text('깃허브', style: f15bw500),
                               const SizedBox(width: 4),
                               SvgPicture.asset('assets/icon/github.svg'),
-                              const SizedBox(width: 25),
+                              const SizedBox(width: 10),
                               Container(
-                                  width: 268,
-                                  height: 45,
-                                  decoration: BoxDecoration(
-                                      border:
-                                      Border.all(color: Color(0xffEBEBEB)),
-                                      borderRadius: BorderRadius.circular(6)),
-                                  child: Center(
-                                    child: TextField(
-                                      decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                              borderSide: BorderSide.none),
-                                          hintText: 'https://github.com/dooly',
-                                          hintStyle: TextStyle(fontSize: 13)),
-                                    ),
-                                  ))
+                                width: 270,
+                                height: 45,
+                                alignment: Alignment.centerLeft,
+                                padding: EdgeInsets.only(left: 10), // 내부패딩
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Color(0xffEBEBEB)),
+                                    borderRadius:
+                                    BorderRadius.circular(6)),
+                                child:  Text('https://github.com/somicoco', style: f13bw500),
+                              ),
                             ],
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(left: 16, top: 40),
+                          padding: EdgeInsets.only(left: 16, top: 20),
                           child: Row(
                             children: [
-                              Text('블로그'),
+                              Text('블로그', style: f15bw500),
                               const SizedBox(width: 4),
                               SvgPicture.asset('assets/icon/blog.svg'),
-                              const SizedBox(width: 25),
+                              const SizedBox(width: 10),
                               Container(
-                                  width: 268,
-                                  height: 45,
-                                  decoration: BoxDecoration(
-                                      border:
-                                      Border.all(color: Color(0xffEBEBEB)),
-                                      borderRadius: BorderRadius.circular(6)),
-                                  child: Center(
-                                    child: TextField(
-                                      decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                              borderSide: BorderSide.none),
-                                          hintText:
-                                          'https://velog.io/@dooly/posts',
-                                          hintStyle: TextStyle(fontSize: 13)),
-                                    ),
-                                  ))
+                                width: 270,
+                                height: 45,
+                                alignment: Alignment.centerLeft,
+                                padding: EdgeInsets.only(left: 10), // 내부패딩
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Color(0xffEBEBEB)),
+                                    borderRadius:
+                                    BorderRadius.circular(6)),
+                                child:  Text('https://velog.io/@somicoco/posts', style: f13bw500),
+                              ),
                             ],
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(left: 16, top: 40),
+                          padding: EdgeInsets.only(left: 16, top: 20),
                           child: Row(
                             children: [
-                              Text('포트폴리오'),
-                              const SizedBox(width: 25),
+                              Text('포트폴리오', style: f15bw500),
+                              const SizedBox(width: 10),
                               Stack(
                                 children: [
                                   Container(
                                       width: 200,
                                       height: 30,
+                                      alignment: Alignment.centerLeft,
+                                      padding: EdgeInsets.only(left: 10), // 내부패딩
                                       decoration: BoxDecoration(
                                           border: Border.all(
                                               color: Color(0xffEBEBEB)),
                                           borderRadius:
                                           BorderRadius.circular(15)),
-                                      child: Center(
-                                        child: TextField(
-                                          textAlignVertical:
-                                          TextAlignVertical.center,
-                                          decoration: InputDecoration(
-                                              border: OutlineInputBorder(
-                                                  borderSide: BorderSide.none),
-                                              hintText: '둘리 포트폴리오.pdf',
-                                              hintStyle:
-                                              TextStyle(fontSize: 12)),
-                                        ),
-                                      )),
+                                      child:  Text('둘리 포트폴리오', style: f13bw500),
+                                      ),
                                   Positioned(
                                     child: GestureDetector(
                                       onTap: () {
@@ -345,8 +343,36 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
                     ),
                   ),
                   SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
                     child: Column(
                       children: [
+                        PostItem(
+                          title: '새해맞이 IOS 같이 공부하실 분 구해요',
+                          subtitle: '신입회원 모집 중입니다. 언제든 와주세요!',
+                          image: 'assets/image/example/profile_study_pic.png',
+                          likeCount: 2,
+                          commentCount: 3,
+                          dateTime: '2024년 2월 14일 오전 11:47',
+                          viewCount: 8,
+                        ),
+                        PostItem(
+                          title: '새해맞이 IOS 같이 공부하실 분 구해요',
+                          subtitle: '신입회원 모집 중입니다. 언제든 와주세요!',
+                          image: 'assets/image/example/profile_study_pic.png',
+                          likeCount: 2,
+                          commentCount: 3,
+                          dateTime: '2024년 2월 14일 오전 11:47',
+                          viewCount: 8,
+                        ),
+                        PostItem(
+                          title: '새해맞이 IOS 같이 공부하실 분 구해요',
+                          subtitle: '신입회원 모집 중입니다. 언제든 와주세요!',
+                          image: 'assets/image/example/profile_study_pic.png',
+                          likeCount: 2,
+                          commentCount: 3,
+                          dateTime: '2024년 2월 14일 오전 11:47',
+                          viewCount: 8,
+                        ),
                         PostItem(
                           title: '새해맞이 IOS 같이 공부하실 분 구해요',
                           subtitle: '신입회원 모집 중입니다. 언제든 와주세요!',
@@ -378,29 +404,29 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
                     ),
                   ),
                   SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        CustomContainer(
-                            imagePath: 'assets/image/example/profile_study_pic.png',
-                            title: '[안공모] 안드로이드 스튜디오 공부 모임',
-                            description:
-                            '안드로이드 앱 개발할 사람들 모두 모여라~ \n소통, 배려, 존중하는 스터디입니다.',
-                            numberOfPeople: 120),
-                        CustomContainer(
-                            imagePath: 'assets/image/example/profile_study_pic.png',
-                            title: '[안공모] 안드로이드 스튜디오 공부 모임',
-                            description:
-                            '안드로이드 앱 개발할 사람들 모두 모여라~ \n소통, 배려, 존중하는 스터디입니다.',
-                            numberOfPeople: 120),
-                      ],
-                    ),
+                    physics: BouncingScrollPhysics(),
+                      child: Column(
+                        children: [
+                          CustomContainer(
+                              imagePath: 'assets/image/example/profile_study_pic.png',
+                              title: '[안공모] 안드로이드 스튜디오 공부 모임',
+                              description:
+                              '안드로이드 앱 개발할 사람들 모두 모여라~ \n소통, 배려, 존중하는 스터디입니다.',
+                              numberOfPeople: 120),
+                          CustomContainer(
+                              imagePath: 'assets/image/example/profile_study_pic.png',
+                              title: '[안공모] 안드로이드 스튜디오 공부 모임',
+                              description:
+                              '안드로이드 앱 개발할 사람들 모두 모여라~ \n소통, 배려, 존중하는 스터디입니다.',
+                              numberOfPeople: 120),
+                        ],
+                      ),
                   ),
                 ],
               ),
             ),
           ],
         ),
-      ),
     );
   }
 }
@@ -426,7 +452,6 @@ class CustomContainer extends StatelessWidget {
         children: [
           Container(
             width: MediaQuery.of(context).size.width,
-            height: 92,
             decoration: BoxDecoration(
               border: Border(
                 top: BorderSide(color: Color(0xffD7D7D7)),

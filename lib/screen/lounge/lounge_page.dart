@@ -1,19 +1,11 @@
+import 'package:circlet/components/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
-class Post {
-  String title; // 제목
-  String content; // 내용
-  String writingTime; // 글 작성시간
-  int hits; // 조회수
-  int commentCount; // 댓글 수
-  int likeCount; // 좋아요 수
-  bool like; // 좋아요 상태
-  int picCount;
+import '../post/post_view_page.dart';
 
-  Post(this.title, this.content, this.writingTime, this.hits, this.commentCount,
-      this.likeCount, this.like, this.picCount);
-}
 
 class LoungePage extends StatefulWidget {
   @override
@@ -22,9 +14,9 @@ class LoungePage extends StatefulWidget {
 
 class _LoungePageState extends State<LoungePage> with TickerProviderStateMixin {
   late TabController _LoungePageTabController;
-  final List<Post> posts = [
-    Post('안녕', '내용1', '2024년 2월 24일 오전 11:37', 48, 12, 34, false, 2),
-    Post('반가워', '내용2', '2024년 2월 23일 오후 10:01', 32, 18, 7, false, 3),
+  final List<PostInfo> posts = [
+    PostInfo('안녕', '내용1', '2024년 2월 24일 오전 11:37', '',48, 12, 34, false),
+    PostInfo('반가워', '내용2', '2024년 2월 23일 오후 10:01', '',32, 18, 7, false),
   ];
 
   @override
@@ -106,7 +98,7 @@ class _LoungePageState extends State<LoungePage> with TickerProviderStateMixin {
               itemCount: posts.length,
               itemBuilder: (context, index){
                 return PostItem(
-                  post: posts[index],
+                  postInfo: posts[index],
                   onHeartTap: () {
                     setState(() {
                       // Toggle like state
@@ -164,181 +156,3 @@ class _LoungePageState extends State<LoungePage> with TickerProviderStateMixin {
   }
 }
 
-class PostItem extends StatelessWidget {
-  final Post post;
-  final VoidCallback onHeartTap;
-
-  const PostItem({Key? key, required this.post, required this.onHeartTap})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.only(left: 15, top: 26, bottom: 10),
-          child: Row(
-            children: [
-              GestureDetector(
-                child: Row(
-                  children: [
-                    ClipOval(
-                      child: Container(
-                        height: 30,
-                        width: 30,
-                        child: Image.asset(
-                          'assets/image/example/profile_pic.png',
-                          fit: BoxFit.cover,
-                          width: 30,
-                          height: 30,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    Text(
-                      '둘리',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontFamily: 'NotoSans',
-                        fontSize: 12,
-                      ),
-                    )
-                  ],
-                ),
-                onTap: () {
-                  print('유저 프로필이나 이름 클릭');
-                },
-              ),
-              Spacer(),
-              Text(
-                post.writingTime,
-                style: TextStyle(
-                    fontSize: 8,
-                    color: Color(0xffABABAB),
-                    fontFamily: 'NotoSans',
-                    fontWeight: FontWeight.w500),
-              ),
-              SizedBox(width: 1), // 너무 가까워보임
-              Text('조회수 ${post.hits}',
-                  style: TextStyle(
-                      fontSize: 8,
-                      color: Color(0xffABABAB),
-                      fontFamily: 'NotoSans',
-                      fontWeight: FontWeight.w500)),
-              SizedBox(width: 32),
-            ],
-          ),
-        ),
-        Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 14),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    child: Text(
-                      post.title,
-                      maxLines: null,
-                      overflow: TextOverflow.visible,
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, fontFamily: 'NotoSans'),
-                    ),
-                    width: MediaQuery.of(context).size.width / 1.5,
-                  ),
-                  Text(
-                    post.content,
-                    maxLines: null,
-                    overflow: TextOverflow.visible,
-                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, fontFamily: 'NotoSans'),
-                  ),
-                  const SizedBox(height: 4),
-                  Stack(
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width - 28, // 여기 부분 수정해야함
-                        height: 220,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
-                            border: Border.all(color: Colors.black)),
-                        child: Image.asset(
-                          'assets/image/example/profile_study_pic.png',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Positioned(
-                        top: 7,
-                        right: 7,
-                        child: Container(
-                            width: 29,
-                            height: 26,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
-                                color: Color(0xff7E889C)),
-                            child: Center(
-                              child: Text('${post.picCount}',
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.white, fontFamily: 'NotoSans', fontWeight: FontWeight.w700)),
-                            )),
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-        SizedBox(
-          height: 100,
-        ),
-        _ThinBottomLine(),
-        Padding(
-          padding: EdgeInsets.only(left: 21, top: 11, bottom: 16),
-          // 위 아래 12하면 가운데
-          child: Row(
-            children: [
-              GestureDetector(
-                onTap: onHeartTap,
-                child: SvgPicture.asset(post.like
-                    ? 'assets/icon/Heart.svg'
-                    : 'assets/icon/emptyHeart.svg'),
-              ),
-              const SizedBox(width: 5),
-              Text('${post.likeCount}',
-                  style: TextStyle(fontFamily: 'Bold', fontSize: 12, fontWeight: FontWeight.w700)),
-              const SizedBox(width: 6),
-              SvgPicture.asset('assets/icon/chat.svg'),
-              const SizedBox(width: 5),
-              Text('${post.commentCount}',
-                  style: TextStyle(fontFamily: 'NotoSans', fontSize: 12, fontWeight: FontWeight.w700)),
-              Spacer(),
-              Text('Q&A',
-                  style: TextStyle(
-                      fontSize: 10,
-                      fontFamily: 'NotoSans',
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xffABABAB))),
-              const SizedBox(width: 29)
-            ],
-          ),
-        ),
-        _ThickBottomLine()
-      ],
-    );
-  }
-
-  Widget _ThinBottomLine() {
-    return Container(
-      color: Color(0xffEBEBEB),
-      height: 1,
-      width: double.infinity,
-    );
-  }
-
-  Widget _ThickBottomLine() {
-    return Container(
-      color: Color(0xffEBEBEB),
-      height: 10,
-      width: double.infinity,
-    );
-  }
-}
