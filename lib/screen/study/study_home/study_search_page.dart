@@ -1,6 +1,12 @@
+import 'package:circlet/screen/study/study_home/search_category_page.dart';
+import 'package:circlet/screen/study/study_home/study_home_page.dart';
+import 'package:circlet/screen/study/study_home/study_more/new_study_page.dart';
+import 'package:circlet/screen/study/study_home/study_more/popular_study_page.dart';
+import 'package:circlet/screen/study/study_home/study_more/recommend_study_page.dart';
 import 'package:circlet/util/font/font.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import '../../../components/components.dart';
 import '../../../util/color.dart';
 
@@ -12,6 +18,21 @@ class StudySearchPage extends StatefulWidget {
 }
 
 class _StudySearchPageState extends State<StudySearchPage> {
+  List<StudyInfo> studyInfo1 = [ // 인기
+    StudyInfo('Study1','IOS','대전광역시 유성구','안녕하세요 반갑습니다', ['#플러터', '안드로이드'],23,100), // 스터디 이름, 카테고리. 위치, 소개글, 멤버수, 조회수
+    StudyInfo('Study2','게임','대전광역시 서구','게임개발합니다',['#보안', '네트워크'],79, 662),
+    StudyInfo('Study3','인공지능','대전광역시 동구','인공지능 같이 배워봐요',['#게임', '예시'],12, 45),
+  ];
+
+  List<StudyInfo> studyInfo2 = [ // 신규
+    StudyInfo('Study4','백엔드/서버','대전광역시 유성구','안녕하세요 반갑습니다',['#백엔드'],23,100), // 스터디 이름, 카테고리. 위치, 소개글, 멤버수, 조회수
+    StudyInfo('Study5','프론트엔드','대전광역시 서구','프론트엔드 개발합니다',['#프론트엔드', '백엔드'],79, 662),
+    StudyInfo('Study6','임베디드','대전광역시 동구','임베디드 공부할 뿐',['#임베디드', '하드웨어'],12, 45),
+  ];
+
+  PostInfo postinfo = PostInfo('필독 운영 계획','필독입니다','2024년 2월 14일 오전 11:47', '공지', 8, 0, 0, false);
+
+
   Color myStudyText = Colors.black;
   Color studySearchText = Colors.grey;
   bool isMyStudyMode = true;
@@ -28,7 +49,7 @@ class _StudySearchPageState extends State<StudySearchPage> {
     '인공지능',
     '전체보기'
   ];
-  List<String> popularStudyTitle = ['IOS', '게임', '안드로이드'];
+
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +57,7 @@ class _StudySearchPageState extends State<StudySearchPage> {
       appBar: AppBar(
           title: const Text(
             "DevLinkUp",
-            style: TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 30),
+            style: f30bw700,
           ),
           actions: [
             GestureDetector(
@@ -81,7 +101,7 @@ class _StudySearchPageState extends State<StudySearchPage> {
                     onTap: () {
                       setState(() {
                         myStudyText = Colors.black;
-                        studySearchText = Colors.grey;
+                        studySearchText = Color(0xff8F8F8F);
                         isMyStudyMode = true;
                       });
                     },
@@ -121,10 +141,7 @@ class _StudySearchPageState extends State<StudySearchPage> {
                       child: Row(
                         children: [
                           Text('카테고리',
-                              style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: 'NotoSans')),
+                              style: f22bw700)
                         ],
                       ),
                     ),
@@ -136,9 +153,9 @@ class _StudySearchPageState extends State<StudySearchPage> {
                             children: [
                               IconText(
                                 image: 'assets/icon/apple.svg',
-                                text: 'iOS 개발',
+                                text: 'IOS 개발',
                                 ontap: () {
-                                  print('111');
+                                  Get.to(SearchCategoryPage(categoryName: 'IOS',));
                                 },
                                 isLarge: false,
                               ),
@@ -147,7 +164,7 @@ class _StudySearchPageState extends State<StudySearchPage> {
                                 image: 'assets/icon/android.svg',
                                 text: '안드로이드 개발',
                                 ontap: () {
-                                  print('111');
+                                  Get.to(SearchCategoryPage(categoryName: '안드로이드 개발'));
                                 },
                                 isLarge: false,
                               ),
@@ -156,7 +173,7 @@ class _StudySearchPageState extends State<StudySearchPage> {
                                 image: 'assets/icon/web.svg',
                                 text: '웹개발',
                                 ontap: () {
-                                  print('111');
+                                  Get.to(SearchCategoryPage(categoryName: '웹 개발' ));
                                 },
                                 isLarge: false,
                               ),
@@ -165,7 +182,7 @@ class _StudySearchPageState extends State<StudySearchPage> {
                                 image: 'assets/icon/game.svg',
                                 text: '게임 개발',
                                 ontap: () {
-                                  print('111');
+                                  Get.to(SearchCategoryPage(categoryName: '게임 개발'));
                                 },
                                 isLarge: false,
                               ),
@@ -174,13 +191,13 @@ class _StudySearchPageState extends State<StudySearchPage> {
                                 image: 'assets/icon/security.svg',
                                 text: '네트워크/보안',
                                 ontap: () {
-                                  print('111');
+                                  Get.to(SearchCategoryPage(categoryName: '네트워크/보안' ));
                                 },
                                 isLarge: false,
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Row(
@@ -189,7 +206,7 @@ class _StudySearchPageState extends State<StudySearchPage> {
                                 image: 'assets/icon/server.svg',
                                 text: '백엔드/서버',
                                 ontap: () {
-                                  print('111');
+                                  Get.to(SearchCategoryPage(categoryName: '백엔드/서버' ));
                                 },
                                 isLarge: false,
                               ),
@@ -198,7 +215,7 @@ class _StudySearchPageState extends State<StudySearchPage> {
                                 image: 'assets/icon/frontEnd.svg',
                                 text: '프론트엔드',
                                 ontap: () {
-                                  print('111');
+                                  Get.to(SearchCategoryPage(categoryName: '프론트엔드' ));
                                 },
                                 isLarge: false,
                               ),
@@ -207,7 +224,7 @@ class _StudySearchPageState extends State<StudySearchPage> {
                                 image: 'assets/icon/embedded.svg',
                                 text: '임베디드',
                                 ontap: () {
-                                  print('111');
+                                  Get.to(SearchCategoryPage(categoryName: '임베디드'));
                                 },
                                 isLarge: false,
                               ),
@@ -216,7 +233,7 @@ class _StudySearchPageState extends State<StudySearchPage> {
                                 image: 'assets/icon/ai.svg',
                                 text: '인공지능',
                                 ontap: () {
-                                  print('111');
+                                  Get.to(SearchCategoryPage(categoryName: '인공지능'));
                                 },
                                 isLarge: false,
                               ),
@@ -225,7 +242,7 @@ class _StudySearchPageState extends State<StudySearchPage> {
                                 image: 'assets/icon/grid.svg',
                                 text: '전체보기',
                                 ontap: () {
-                                  print('111');
+                                  Get.to(SearchCategoryPage(categoryName: '전체보기'));
                                 },
                                 isLarge: false,
                               ),
@@ -244,14 +261,12 @@ class _StudySearchPageState extends State<StudySearchPage> {
                             style: f18bw700,
                           ),
                           GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Get.to(PopularStudyPage());
+                            },
                             child: Text(
                               "더보기",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w300,
-                                  fontFamily: 'NotoSans',
-                                  color: Color(0xff909090)),
+                                style: f16w100MoreGray
                             ),
                           ),
                         ],
@@ -259,15 +274,18 @@ class _StudySearchPageState extends State<StudySearchPage> {
                     ),
                     ListView.builder(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: postTitle.length,
+                      physics: NeverScrollableScrollPhysics(), // 3개만 표시되는거라 스크롤 안되게
+                      itemCount: studyInfo1.length,
                       itemBuilder: (context, index) {
-                        final backgroundColor = interestBackgroundColor[popularStudyTitle[index]];
-                        final textColor = interestTextColor[popularStudyTitle[index]];
+                        final popularStudyInfo = studyInfo1[index];
+                        final backgroundColor = interestBackgroundColor[popularStudyInfo.studyCategory];
+                        final textColor = interestTextColor[popularStudyInfo.studyCategory];
                         return Padding(
                           padding: EdgeInsets.only(top: 17),
                           child: GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Get.to(StudyHomePage(studyInfo: studyInfo1[index], isJoined: true, postInfo: postinfo,));
+                            },
                             child: Container(
                               decoration: BoxDecoration(
                                 border: Border.all(color: Colors.transparent),
@@ -320,18 +338,18 @@ class _StudySearchPageState extends State<StudySearchPage> {
                                             borderRadius: BorderRadius.circular(30),
                                           ),
                                           child: Text(
-                                            popularStudyTitle[index],
+                                            popularStudyInfo.studyCategory, // 카테고리
                                             style: TextStyle(
                                               color: textColor ?? Colors.black,
                                               fontSize: 12,
-                                              fontWeight: FontWeight.bold,
+                                              fontWeight: FontWeight.w700,
                                               fontFamily: 'NotoSans',
                                             ),
                                           ),
                                         ),
                                         const SizedBox(height: 6),
                                         Text(
-                                          postTitle[index],
+                                          popularStudyInfo.studyName, // 스터디 이름
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w700,
@@ -342,11 +360,11 @@ class _StudySearchPageState extends State<StudySearchPage> {
                                           padding: EdgeInsets.only(top: 10, right: 29),
                                           child: Row(
                                             children: [
-                                              Text('대전광역시 유성구', style: f10dgw500),
+                                              Text(popularStudyInfo.studyLocation, style: f10w400DeppGray),
                                               Spacer(),
-                                              Text('멤버 6', style: f10dgw500),
+                                              Text('멤버 ${popularStudyInfo.members}', style: f10w400DeppGray),
                                               Spacer(),
-                                              Text('조회 8', style: f10dgw500),
+                                              Text('조회 ${popularStudyInfo.views}', style: f10w400DeppGray),
                                             ],
                                           ),
                                         )
@@ -361,23 +379,21 @@ class _StudySearchPageState extends State<StudySearchPage> {
                       },
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 14, right: 9, top: 32),
+                      padding: EdgeInsets.only(left: 2, right: 10, top: 35),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             "신규 스터디",
                             style: f18bw700,
                           ),
-                          Spacer(),
                           GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Get.to(PopularStudyPage());
+                            },
                             child: Text(
-                              "더보기",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w300,
-                                  fontFamily: 'NotoSans',
-                                  color: Color(0xff909090)),
+                                "더보기",
+                                style: f16w100MoreGray
                             ),
                           ),
                         ],
@@ -385,15 +401,18 @@ class _StudySearchPageState extends State<StudySearchPage> {
                     ),
                     ListView.builder(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: postTitle.length,
+                      physics: NeverScrollableScrollPhysics(), // 3개만 표시되는거라 스크롤 안되게
+                      itemCount: studyInfo2.length,
                       itemBuilder: (context, index) {
-                        final backgroundColor = interestBackgroundColor[popularStudyTitle[index]];
-                        final textColor = interestTextColor[popularStudyTitle[index]];
+                        final newStudyInfo = studyInfo2[index];
+                        final backgroundColor = interestBackgroundColor[newStudyInfo.studyCategory];
+                        final textColor = interestTextColor[newStudyInfo.studyCategory];
                         return Padding(
                           padding: EdgeInsets.only(top: 17),
                           child: GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Get.to(StudyHomePage(studyInfo: studyInfo1[index], isJoined: true, postInfo: postinfo,));
+                            },
                             child: Container(
                               decoration: BoxDecoration(
                                 border: Border.all(color: Colors.transparent),
@@ -424,7 +443,7 @@ class _StudySearchPageState extends State<StudySearchPage> {
                                     padding: EdgeInsets.only(left: 10, right: 10),
                                     child: Container(
                                       child: Image.asset(
-                                        'assets/image/example/ex3.png',
+                                        'assets/image/example/ex${index}.png',
                                       ),
                                       width: 75,
                                       height: 70,
@@ -446,18 +465,18 @@ class _StudySearchPageState extends State<StudySearchPage> {
                                             borderRadius: BorderRadius.circular(30),
                                           ),
                                           child: Text(
-                                            popularStudyTitle[index],
+                                            newStudyInfo.studyCategory, // 카테고리
                                             style: TextStyle(
                                               color: textColor ?? Colors.black,
                                               fontSize: 12,
-                                              fontWeight: FontWeight.bold,
+                                              fontWeight: FontWeight.w700,
                                               fontFamily: 'NotoSans',
                                             ),
                                           ),
                                         ),
                                         const SizedBox(height: 6),
                                         Text(
-                                          postTitle[index],
+                                          newStudyInfo.studyName, // 스터디 이름
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w700,
@@ -468,11 +487,11 @@ class _StudySearchPageState extends State<StudySearchPage> {
                                           padding: EdgeInsets.only(top: 10, right: 29),
                                           child: Row(
                                             children: [
-                                              Text('대전광역시 유성구', style: f10dgw500),
+                                              Text(newStudyInfo.studyLocation, style: f10w400DeppGray),
                                               Spacer(),
-                                              Text('멤버 6', style: f10dgw500),
+                                              Text('멤버 ${newStudyInfo.members}', style: f10w400DeppGray),
                                               Spacer(),
-                                              Text('조회 8', style: f10dgw500),
+                                              Text('조회 ${newStudyInfo.views}', style: f10w400DeppGray),
                                             ],
                                           ),
                                         )
@@ -488,7 +507,7 @@ class _StudySearchPageState extends State<StudySearchPage> {
                     ),
 
                     Padding(
-                      padding: EdgeInsets.only(left: 10, right: 10, top: 30),
+                      padding: EdgeInsets.only(left: 2, right: 10, top: 35),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -497,14 +516,12 @@ class _StudySearchPageState extends State<StudySearchPage> {
                             style: f18bw700,
                           ),
                           GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Get.to(PopularStudyPage());
+                            },
                             child: Text(
-                              "더보기",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w300,
-                                  fontFamily: 'NotoSans',
-                                  color: Color(0xff909090)),
+                                "더보기",
+                                style: f16w100MoreGray
                             ),
                           ),
                         ],
@@ -512,15 +529,18 @@ class _StudySearchPageState extends State<StudySearchPage> {
                     ),
                     ListView.builder(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: postTitle.length,
+                      physics: NeverScrollableScrollPhysics(), // 3개만 표시되는거라 스크롤 안되게
+                      itemCount: studyInfo2.length,
                       itemBuilder: (context, index) {
-                        final backgroundColor = interestBackgroundColor[popularStudyTitle[index]];
-                        final textColor = interestTextColor[popularStudyTitle[index]];
+                        final newStudyInfo = studyInfo2[index];
+                        final backgroundColor = interestBackgroundColor[newStudyInfo.studyCategory];
+                        final textColor = interestTextColor[newStudyInfo.studyCategory];
                         return Padding(
                           padding: EdgeInsets.only(top: 17),
                           child: GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Get.to(StudyHomePage(studyInfo: studyInfo2[index], isJoined: true, postInfo: postinfo,));
+                            },
                             child: Container(
                               decoration: BoxDecoration(
                                 border: Border.all(color: Colors.transparent),
@@ -551,7 +571,7 @@ class _StudySearchPageState extends State<StudySearchPage> {
                                     padding: EdgeInsets.only(left: 10, right: 10),
                                     child: Container(
                                       child: Image.asset(
-                                        'assets/image/example/ex3.png',
+                                        'assets/image/example/ex${index}.png',
                                       ),
                                       width: 75,
                                       height: 70,
@@ -573,18 +593,18 @@ class _StudySearchPageState extends State<StudySearchPage> {
                                             borderRadius: BorderRadius.circular(30),
                                           ),
                                           child: Text(
-                                            popularStudyTitle[index],
+                                            newStudyInfo.studyCategory, // 카테고리
                                             style: TextStyle(
                                               color: textColor ?? Colors.black,
                                               fontSize: 12,
-                                              fontWeight: FontWeight.bold,
+                                              fontWeight: FontWeight.w700,
                                               fontFamily: 'NotoSans',
                                             ),
                                           ),
                                         ),
                                         const SizedBox(height: 6),
                                         Text(
-                                          postTitle[index],
+                                          newStudyInfo.studyName, // 스터디 이름
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.w700,
@@ -595,11 +615,11 @@ class _StudySearchPageState extends State<StudySearchPage> {
                                           padding: EdgeInsets.only(top: 10, right: 29),
                                           child: Row(
                                             children: [
-                                              Text('대전광역시 유성구', style: f10dgw500),
+                                              Text(newStudyInfo.studyLocation, style: f10w400DeppGray),
                                               Spacer(),
-                                              Text('멤버 6', style: f10dgw500),
+                                              Text('멤버 ${newStudyInfo.members}', style: f10w400DeppGray),
                                               Spacer(),
-                                              Text('조회 8', style: f10dgw500),
+                                              Text('조회 ${newStudyInfo.views}', style: f10w400DeppGray),
                                             ],
                                           ),
                                         )
@@ -621,66 +641,4 @@ class _StudySearchPageState extends State<StudySearchPage> {
       ),
     );
   }
-}
-
-Widget _buildCategoryItem(BuildContext context, String imagePath, String text) {
-  return GestureDetector(
-    onTap: () {},
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          child: Image.asset(
-            imagePath,
-            width: 54,
-            height: 54,
-          ),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5), color: Color(0xffF2F2F2)),
-        ), // 이미지와 텍스트 사이의 간격
-        SizedBox(
-          height: 5,
-        ),
-        Text(
-          text,
-          style: const TextStyle(
-              fontSize: 9, fontWeight: FontWeight.w700, fontFamily: 'NotoSans'),
-        ),
-      ],
-    ),
-  );
-}
-
-Widget _buildCategory(String text, String containerColor, String textColor) {
-  return LayoutBuilder(
-    // 컨테이너의 크기를 알 수 있음
-    builder: (context, constraints) {
-      final textWidth = TextPainter(
-        text: TextSpan(
-          text: text,
-          style: TextStyle(
-              fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black),
-        ),
-        textDirection: TextDirection.ltr,
-      )..layout(maxWidth: constraints.maxWidth);
-
-      final containerWidth = textWidth.width + 20;
-
-      return Container(
-        width: containerWidth,
-        height: 20,
-        decoration: BoxDecoration(
-          color: Colors.black,
-          borderRadius: BorderRadius.circular(30),
-        ),
-        child: Center(
-          child: Text(text,
-              style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black)),
-        ),
-      );
-    },
-  );
 }

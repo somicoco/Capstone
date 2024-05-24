@@ -13,9 +13,11 @@ import 'package:circlet/screen/post/post_create_page.dart';
 import 'package:circlet/screen/post/post_view_page.dart';
 import 'package:circlet/screen/profile/setting/profile_setting_page.dart';
 import 'package:circlet/screen/profile/user/user_profile_page.dart';
+import 'package:circlet/screen/study/study_chat_page.dart';
 import 'package:circlet/screen/study/study_home/search_category_page.dart';
 import 'package:circlet/screen/study/study_home/study_home_page.dart';
 import 'package:circlet/screen/study/study_home/study_search_page.dart';
+import 'package:circlet/screen/study/study_register_page.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -51,9 +53,9 @@ class MyApp extends StatelessWidget {
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        useMaterial3: false,
       ),
-      home: StudyHomePage(studyName: '안사모', notice: true,),
+      home: StudySearchPage(),
     );
   }
 }

@@ -7,6 +7,7 @@ const hintGrayColor = Color(0xff6E6E6E);
 const darkGrayColor = Color(0xff3D3D3D);
 const grayColor = Color(0xffABABAB);
 const deepgrayColor = Color(0xff999999);
+const moreGrayColor = Color(0xff909090);
 
 const Map<String, Color> interestBackgroundColor = {
   "IOS" : Color(0xffF8E5E5),
