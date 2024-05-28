@@ -2,7 +2,7 @@
 import 'package:circlet/components/components.dart';
 import 'package:circlet/screen/login_register/id_password_search/id_search_page.dart';
 import 'package:circlet/screen/login_register/id_password_search/password_search_page.dart';
-import 'package:circlet/screen/login_register/register/register_page1.dart';
+import 'package:circlet/screen/login_register/register/phone_auth.dart';
 import 'package:circlet/screen/main/study_search_page.dart';
 import 'package:circlet/util/color.dart';
 import 'package:circlet/util/font/font.dart';
@@ -111,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
           GestureDetector(
             onTap: (){
               setState(() {
-                Get.to(RegisterPage1());
+                Get.to(PhoneAuth());
 
               });
             },

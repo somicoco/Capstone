@@ -41,12 +41,15 @@ class _EditPasswordState extends State<EditPassword> {
           ),
         ),
         body: Padding(
-          padding: const EdgeInsets.only(top: 20, left: 12, right: 12,bottom: 120),
+          padding: const EdgeInsets.only(top: 14, left: 12, right: 12,bottom: 120),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text('현재 비밀번호', style: f15bw500,),
+              const SizedBox(
+                height: 6,
+              ),
               suffixTextFormBox(
                 hintText: '현재 비밀번호',
                 textController: oldPasswordController,
@@ -67,10 +70,11 @@ class _EditPasswordState extends State<EditPassword> {
                 backgroundColor: mainColor,
               ),
               const SizedBox(
-                height: 43,
+                height: 21,
               ),
+              Text('새 비밀번호', style: f15bw500,),
               const SizedBox(
-                height: 9,
+                height: 6,
               ),
               suffixTextFormBox(
                 hintText: '새 비밀번호',
@@ -92,7 +96,10 @@ class _EditPasswordState extends State<EditPassword> {
                 backgroundColor: mainColor,
               ),
               const SizedBox(
-                height: 17,
+                height: 18,
+              ),Text('새 비밀번호 확인', style: f15bw500,),
+              const SizedBox(
+                height: 6,
               ),
               suffixTextFormBox(
                 hintText: '새 비밀번호 확인',
@@ -121,15 +128,6 @@ class _EditPasswordState extends State<EditPassword> {
                 style: f12w300HintGray,
                 softWrap: true,
               ),
-              Text(
-                '* 다른사이트에서 사용하는 것과 동일하거나 쉬운 비밀번호는 사용하지 마세요. ',
-                style: f12w300HintGray,
-                softWrap: true,
-              ),Text(
-                '* 안전한 계정 사용을 위해 비밀번호는 주기적으로 변경해 주세요.',
-                style: f12w300HintGray,
-                softWrap: true,
-              ),
               Spacer(),
               GestureDetector(
                 onTap: (){
@@ -146,7 +144,7 @@ class _EditPasswordState extends State<EditPassword> {
                   ),
                   child: Center( // 텍스트를 가운데에 위치시키기 위해 Center 위젯 추가
                     child: Text(
-                      '비밀번호 재설정하기',
+                      '변경하기',
                       style: TextStyle(
                           color: isPasswordValid == true? Color(0xffFFFFFF):Color(0xffABABAB)
                           ,fontSize: 18),
