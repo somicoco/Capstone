@@ -37,8 +37,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_svg: ^2.0.7
   get: ^4.6.5
-  firebase_core: ^2.24.2
-  cloud_firestore: ^4.14.0
+  smooth_page_indicator: ^1.1.0
+  image_picker: ^1.1.1
+  #firebase_core: ^2.24.2
+  #cloud_firestore: ^4.14.0
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +68,11 @@ flutter:
           weight: 300
         - asset: fonts/NotoSansKR-Medium.ttf
           weight: 500
+        - asset: fonts/NotoSansKR-Regular.ttf
+          weight: 400
+        - asset: fonts/fonts/NotoSansKR-Thin.ttf
+          weight: 100
+
 
   uses-material-design: true
 
@@ -74,6 +81,7 @@ flutter:
     - assets/
     - assets/icon/
     - assets/image/
+    - assets/image/example/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
