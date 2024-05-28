@@ -19,7 +19,7 @@ class _AddBlogPageState extends State<AddBlogPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('블로그 등록',
+        title: Text('블로그 등록1',
           style: f22bw500,),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(1), // Divider의 높이 설정
