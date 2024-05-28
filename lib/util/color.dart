@@ -6,8 +6,25 @@ const whiteColor = Color(0xffFFFFFF);
 const hintGrayColor = Color(0xff6E6E6E);
 const darkGrayColor = Color(0xff3D3D3D);
 const grayColor = Color(0xffABABAB);
+
+const grayColor2 = Color(0xffBEBEBE);
+const lightGrayColor = Color(0xffEBEBEB);
+const greenColor = Color(0xff0DD675);
+const redColor = Color(0xffE92C2C);
+
+
+const Map<String, Color> scheduleStatusBackColor = {
+  "offLine" : Color(0xffFFEDEA),
+  "onLine" : Color(0xffE4F9EB),
+};
+const Map<String, Color> scheduleStatusTextColor = {
+  "offLine" : Color(0xffE92C2C),
+  "onLine" : Color(0xff00BB34),
+};
+
 const deepgrayColor = Color(0xff999999);
 const moreGrayColor = Color(0xff909090);
+
 
 const Map<String, Color> interestBackgroundColor = {
   "IOS" : Color(0xffF8E5E5),

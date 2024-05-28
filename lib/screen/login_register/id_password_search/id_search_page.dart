@@ -82,7 +82,7 @@ class _IdSearchPageState extends State<IdSearchPage> {
               GestureDetector(
                 onTap: (){
                   setState(() {
-                    certCheck == false? '': showOnlyConfirmTapDialog(context, '아이디 찾기', () { });
+                    certCheck == false? '': showOnlyConfirmTapDialog(context, '아이디 찾기', '아이디는 ***@naver.com입니다.', (){});
 
                   });
 

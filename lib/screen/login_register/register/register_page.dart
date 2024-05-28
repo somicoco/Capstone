@@ -8,14 +8,14 @@ import 'package:get/get_core/src/get_main.dart';
 
 import '../login/login_page.dart';
 
-class RegisterPage2 extends StatefulWidget {
-  const RegisterPage2({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<RegisterPage2> createState() => _RegisterPage2State();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _RegisterPage2State extends State<RegisterPage2> {
+class _RegisterPageState extends State<RegisterPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController checkPasswordController = TextEditingController();
