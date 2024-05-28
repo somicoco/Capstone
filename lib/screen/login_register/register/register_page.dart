@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
-import '../login/login_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -27,6 +26,8 @@ class _RegisterPageState extends State<RegisterPage> {
   bool isEmailValid = false; ///이메일 유효성 검사 여부
   bool isPasswordValid = false;///비밀번호 유효성 검사 여부
   bool isNicknameValid = false;///닉네임 유효성 검사 여부
+
+  bool emailCheck = false;
 
   bool visible = false;
   @override
