@@ -63,7 +63,7 @@ class _PhoneAuthState extends State<PhoneAuth> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            '핸드폰 인증',
+            '핸드폰 인증 0529',
             style: TextStyle(
               fontSize: 22,
             ),
