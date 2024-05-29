@@ -4,6 +4,7 @@ import 'package:circlet/components/components.dart';
 import 'package:circlet/screen/login_register/register/register_page.dart';
 import 'package:circlet/util/color.dart';
 import 'package:circlet/util/font/font.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -28,6 +29,7 @@ class _PhoneAuthState extends State<PhoneAuth> {
   late Timer _timer;
   int _start = 0;
   bool _isCodeSent = false;
+  bool _isPhoneUnique = false;
 
   @override
   void dispose() {
@@ -162,6 +164,7 @@ class _PhoneAuthState extends State<PhoneAuth> {
     );
   }
 
+  /// 전화번호를 국제 형식으로 변환하는 함수, 예: '01012345678' -> '+82 1012345678'
   String _formatPhoneNumber(String phoneNumber) {
     if (phoneNumber.startsWith('0')) {
       return phoneNumber.replaceFirst('0', '+82 ');
@@ -169,32 +172,59 @@ class _PhoneAuthState extends State<PhoneAuth> {
     return phoneNumber;
   }
 
+  /// 사용자 입력 전화번호 중복여부를 검사한 후 중복이 없으면 파이어베이스 인증을 시작하는 함수
   void _verifyPhoneNumber() async {
+    // 사용자 입력 전화번호 포멧팅
     String formattedPhoneNumber = _formatPhoneNumber(_phoneController.text);
-    await _auth.verifyPhoneNumber(
-      phoneNumber: formattedPhoneNumber,
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        await _auth.signInWithCredential(credential);
-      },
+    // 중복검사를 통해 유니크한 전화번호인지 확인
+    _isPhoneUnique = await firebasePhoneDuplicate(formattedPhoneNumber)== false;
 
-      /// 잘못된 전화번호, SMS할당량 초과시 실패 이벤트
-      verificationFailed: (FirebaseAuthException e) {
-        print('Verification failed: ${e.message}');
-      },
-      codeSent: (String verificationId, int? resendToken) {
-        setState(() {
-          _verificationId = verificationId;
-          _isCodeSent = true;
-        });
-        startTimer();
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {
-        setState(() {
-          _verificationId = verificationId;
-        });
-      },
-    );
+    if(_isPhoneUnique) {
+      await _auth.verifyPhoneNumber(
+        phoneNumber: formattedPhoneNumber,
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          await _auth.signInWithCredential(credential);
+        },
+        // 잘못된 전화번호, SMS할당량 초과시 실패 이벤트
+        verificationFailed: (FirebaseAuthException e) {
+          print('Verification failed: ${e.message}');
+        },
+        codeSent: (String verificationId, int? resendToken) {
+          setState(() {
+            _verificationId = verificationId;
+            _isCodeSent = true;
+          });
+          startTimer();
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {
+          setState(() {
+            _verificationId = verificationId;
+          });
+        },
+      );
+      // 중복된 전화번호 일 경우
+    }else{
+      showOnlyConfirmDialog(context, '중복된 번호', "이미 가입된 번호입니다.");
+
+    }
   }
+
+  ///파이어베이스에서 중복된 전화번호를 찾는 함수
+  ///중복된 번호가 존재 할 경우 true, 존재 하지 않을 경우 false 반환
+  Future<bool> firebasePhoneDuplicate(String phoneNumber) async{
+  CollectionReference ref = FirebaseFirestore.instance.collection('userInfo');
+  try {
+    QuerySnapshot snapshot = await ref.where('phone', isEqualTo: phoneNumber).get();
+    if (snapshot.docs.isNotEmpty) {
+      return true; // 중복된 전화번호가 존재함
+    } else {
+      return false; // 중복된 전화번호가 존재하지 않음
+    }
+  } catch (e) {
+    print("Error checking phone number: $e");
+    return true;
+  }
+}
 
   void _signInWithPhoneNumber() async {
     if (_timer.isActive) {
@@ -227,31 +257,11 @@ class _PhoneAuthState extends State<PhoneAuth> {
         setState(() {
           _phoneAuth = false;
         });
-        showOnlyConfirmDialog(context, '핸드폰 인증', "인증번호가 일치하지 않습니다.");
+        showOnlyConfirmDialog(context, '인증번호', "인증번호가 일치하지 않습니다.");
         print('Error Log Phone Auth : ${e.message}');
       }
     } else {
-      showOnlyConfirmDialog(context, '핸드폰 인증', "인증번호의 유효시간이 종료되었습니다.");
+      showOnlyConfirmDialog(context, '인증번호', "인증번호의 유효시간이 종료되었습니다.");
     }
   }
-
-// void showOnlyConfirmDialog(BuildContext context, String message) {
-//   showDialog(
-//     context: context,
-//     builder: (BuildContext context) {
-//       return AlertDialog(
-//         title: Text("확인"),
-//         content: Text(message),
-//         actions: [
-//           TextButton(
-//             child: Text("확인"),
-//             onPressed: () {
-//               Navigator.of(context).pop();
-//             },
-//           ),
-//         ],
-//       );
-//     },
-//   );
-// }
 }
