@@ -1,12 +1,13 @@
 import 'dart:io';
 import 'package:circlet/components/components.dart';
-import 'package:circlet/screen/study/study_home/study_home_page.dart';
 import 'package:circlet/util/font/font.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart'; // 추가
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 class PostCreatePage extends StatefulWidget {
   @override
@@ -25,8 +26,8 @@ class _PostCreatePageState extends State<PostCreatePage> {
   List<String> boardName = ['공지사항', '가입인사', '자유', '질문', '모임후기', '자료실'];
   List<File> imagePaths = [];
   final TextEditingController titleEditingController = TextEditingController();
-  final TextEditingController contentEditingController =
-      TextEditingController();
+  final TextEditingController contentEditingController = TextEditingController();
+  List<String> imageDatePaths = [];
 
   final ImagePicker picker = ImagePicker();
 
@@ -41,26 +42,49 @@ class _PostCreatePageState extends State<PostCreatePage> {
           source: imageSource, maxHeight: 300, maxWidth: 300);
 
       if (imageFile != null) {
-        // 이미지파일이 있다면 addImage를 통해 이미지파일의 경로 추가
         // 이미지 파일 경로를 _addImage() 함수에 전달하여 이미지 추가
         _addImage(File(imageFile.path));
       }
     } catch (e) {
-      print("디버깅용 이미지 호출 에러 : $e");
+      print("에러 : $e");
     }
   }
 
   void _addImage(File imageFile) {
-    if (imageCount < 10) { // image가 10개 이하일 때만 가능하게
-      setState(() {
-        imageCount++;
-        imagePaths.add(imageFile); // 이미지 파일 자체를 추가
-      });
-    } else {
-      print('더 이상 이미지를 추가할 수 없습니다.');
-    }
+    setState(() {
+      imageCount++;
+      imagePaths.add(imageFile); // 이미지 파일 자체를 추가
+      imageDatePaths.add(DateTime.now().toString());
+    });
   }
 
+  Future<String> _uploadImageToStorage(File imageFile) async {
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    Reference storageRef = FirebaseStorage.instance.ref().child('images/$fileName');
+    UploadTask uploadTask = storageRef.putFile(imageFile);
+    TaskSnapshot taskSnapshot = await uploadTask;
+    return await taskSnapshot.ref.getDownloadURL();
+  }
+
+  void _showImageLimitDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('알림'),
+          content: Text('이미지는 최대 10개까지 추가할 수 있습니다.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('확인'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   void _showBottomSheet(BuildContext context) {
     showModalBottomSheet(
@@ -93,6 +117,7 @@ class _PostCreatePageState extends State<PostCreatePage> {
   void _removeImage(int index) {
     setState(() {
       imagePaths.removeAt(index);
+      imageDatePaths.removeAt(index);
       imageCount--;
     });
   }
@@ -125,7 +150,7 @@ class _PostCreatePageState extends State<PostCreatePage> {
                 children: [
                   Padding(
                     padding:
-                        const EdgeInsets.only(left: 12, top: 30, bottom: 12),
+                    const EdgeInsets.only(left: 12, top: 30, bottom: 12),
                     child: Text(
                       widget.selectedTab == 0
                           ? postCategory
@@ -152,7 +177,7 @@ class _PostCreatePageState extends State<PostCreatePage> {
               ),
               Padding(
                 padding:
-                    EdgeInsets.only(left: 12, right: 8, top: 11, bottom: 6),
+                EdgeInsets.only(left: 12, right: 8, top: 11, bottom: 6),
                 child: TextField(
                   controller: titleEditingController,
                   decoration: InputDecoration(
@@ -175,7 +200,9 @@ class _PostCreatePageState extends State<PostCreatePage> {
                       padding: EdgeInsets.only(left: 12, top: 5),
                       child: GestureDetector(
                         onTap: () {
-                          getImage(ImageSource.gallery);
+                          imageCount < 10 ?
+                          getImage(ImageSource.gallery)
+                              : _showImageLimitDialog();
                         },
                         child: Container(
                           width: 60,
@@ -232,7 +259,7 @@ class _PostCreatePageState extends State<PostCreatePage> {
               Padding(
                 padding: EdgeInsets.only(left: 12, right: 12, top: 0),
                 child: Container(
-                  height: Get.height* 0.4,
+                  height: Get.height * 0.4,
                   child: TextField(
                     controller: contentEditingController,
                     maxLines: null,
@@ -285,21 +312,37 @@ class _PostCreatePageState extends State<PostCreatePage> {
           ),
         ),
         bottomNavigationBar: GestureDetector(
-          onTap: () {
-            PostInfo newPost = PostInfo(
-                titleEditingController.text,
-                contentEditingController.text,
-                '2024년 2월 14일 오전 11:47',
-                boardName[widget.selectedTab - 1],
-                0,
-                0,
-                0,
-                false);
-            Get.to(StudyHomePage(
-                studyInfo: widget.studyInfo,
-                isJoined: true,
-                postInfo: newPost,
-                categoryIndex: widget.selectedTab));
+          onTap: () async {
+            CollectionReference ref = FirebaseFirestore.instance.collection('posts');
+
+            final DateTime now = DateTime.now().add(Duration(hours: 9));
+            final DateFormat formatter = DateFormat('yyyy년 M월 d일 a h:mm', 'ko_KR');
+            final String formattedDate = formatter.format(now);
+
+            // 이미지 URL 업로드 리스트
+            List<String> imageUrls = [];
+            for (var imageFile in imagePaths) {
+              String imageUrl = await _uploadImageToStorage(imageFile);
+              imageUrls.add(imageUrl);
+            }
+
+            DocumentReference docRef = await ref.add({
+              'studyId': '스터디아이디',
+              'docId': '',
+              'createDate': formattedDate,
+              'author': '유저 닉네임',
+              'category': boardName[widget.selectedTab - 1],
+              'title': titleEditingController.text,
+              'content': contentEditingController.text,
+              'imagePaths': FieldValue.arrayUnion(imageUrls),
+              'code': '값이없음',
+              'like': false,
+              'likeCount': 0,
+            });
+
+            await docRef.update({'docId': docRef.id});
+
+            Navigator.pop(context);
           },
           child: BottomAppBar(
             height: 50,
@@ -319,7 +362,7 @@ class _PostCreatePageState extends State<PostCreatePage> {
   }
 }
 
-class PhotoWidget extends StatelessWidget { //포토위젯은 이미지파일필요
+class PhotoWidget extends StatelessWidget {
   final File imageFile;
   final VoidCallback onDelete;
 

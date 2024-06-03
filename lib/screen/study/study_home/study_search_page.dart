@@ -30,7 +30,7 @@ class _StudySearchPageState extends State<StudySearchPage> {
     StudyInfo('Study6','임베디드','대전광역시 동구','임베디드 공부할 뿐',['#임베디드', '하드웨어'],12, 45),
   ];
 
-  PostInfo postinfo = PostInfo('필독 운영 계획','필독입니다','2024년 2월 14일 오전 11:47', '공지', 8, 0, 0, false);
+  PostInfo postinfo = PostInfo(id: '12',content: '', title: '', date: '', category: '', imagePaths: []);
 
 
   Color myStudyText = Colors.black;
