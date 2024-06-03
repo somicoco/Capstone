@@ -20,7 +20,7 @@ class _PopularStudyPage extends State<PopularStudyPage>{
     StudyInfo('Study2','게임','대전광역시 서구','게임개발합니다',['#플러터', '스위프트'],79, 662),
     StudyInfo('Study3','인공지능','대전광역시 동구','인공지능 같이 배워봐요',['#플러터', '스위프트'],12, 45),
   ];
-  PostInfo postinfo = PostInfo('','','', '', 8, 0, 0, false);
+  PostInfo postinfo = PostInfo(id: '12',content: '', title: '', date: '', category: '', imagePaths: []);
 
   @override
   Widget build(BuildContext context) {
