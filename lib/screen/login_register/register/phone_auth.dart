@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:circlet/components/components.dart';
+import 'package:circlet/provider/user_state.dart';
 import 'package:circlet/screen/login_register/register/register_page.dart';
 import 'package:circlet/util/color.dart';
 import 'package:circlet/util/font/font.dart';
@@ -11,7 +12,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 import '../../../dialog/dialog.dart';
-import '../login/login_page.dart';
+import '../../../firebase/firebase_user.dart';
 
 class PhoneAuth extends StatefulWidget {
   const PhoneAuth({super.key});
@@ -21,6 +22,7 @@ class PhoneAuth extends StatefulWidget {
 }
 
 class _PhoneAuthState extends State<PhoneAuth> {
+  final us = Get.put(UserState());
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _otpController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -29,7 +31,6 @@ class _PhoneAuthState extends State<PhoneAuth> {
   late Timer _timer;
   int _start = 0;
   bool _isCodeSent = false;
-  bool _isPhoneUnique = false;
 
   @override
   void dispose() {
@@ -61,22 +62,7 @@ class _PhoneAuthState extends State<PhoneAuth> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            '핸드폰 인증 0529',
-            style: TextStyle(
-              fontSize: 22,
-            ),
-          ),
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(1), // Divider의 높이 설정
-            child: Divider(
-              color: Color(0xffEBEBEB), // Divider의 색상 설정
-              height: 1, // Divider의 높이 설정
-              thickness: 1, // Divider의 두께 설정
-            ),
-          ),
-        ),
+        appBar: StyledAppBar(text: '핸드폰인증',),
         body: Padding(
           padding:
               const EdgeInsets.only(top: 13, left: 13, right: 13, bottom: 120),
@@ -134,7 +120,6 @@ class _PhoneAuthState extends State<PhoneAuth> {
                       : showOnlyConfirmDialog(
                           context, '핸드폰 인증', "인증요청을 눌러주세요.");
                   setState(() {
-                    //certCheck == false? '': Get.to(RegisterPage2());
                   });
                 },
                 child: Container(
@@ -172,14 +157,13 @@ class _PhoneAuthState extends State<PhoneAuth> {
     return phoneNumber;
   }
 
-  /// 사용자 입력 전화번호 중복여부를 검사한 후 중복이 없으면 파이어베이스 인증을 시작하는 함수
+  /// 전화번호 중복검사 및 파이어베이스 인증을 시작하는 함수
   void _verifyPhoneNumber() async {
     // 사용자 입력 전화번호 포멧팅
     String formattedPhoneNumber = _formatPhoneNumber(_phoneController.text);
-    // 중복검사를 통해 유니크한 전화번호인지 확인
-    _isPhoneUnique = await firebasePhoneDuplicate(formattedPhoneNumber)== false;
+    await registerPhoneDuplicate(formattedPhoneNumber);
 
-    if(_isPhoneUnique) {
+    if(us.memberCheckPhone.value =='0') {
       await _auth.verifyPhoneNumber(
         phoneNumber: formattedPhoneNumber,
         verificationCompleted: (PhoneAuthCredential credential) async {
@@ -208,25 +192,8 @@ class _PhoneAuthState extends State<PhoneAuth> {
 
     }
   }
-
-  ///파이어베이스에서 중복된 전화번호를 찾는 함수
-  ///중복된 번호가 존재 할 경우 true, 존재 하지 않을 경우 false 반환
-  Future<bool> firebasePhoneDuplicate(String phoneNumber) async{
-  CollectionReference ref = FirebaseFirestore.instance.collection('userInfo');
-  try {
-    QuerySnapshot snapshot = await ref.where('phone', isEqualTo: phoneNumber).get();
-    if (snapshot.docs.isNotEmpty) {
-      return true; // 중복된 전화번호가 존재함
-    } else {
-      return false; // 중복된 전화번호가 존재하지 않음
-    }
-  } catch (e) {
-    print("Error checking phone number: $e");
-    return true;
-  }
-}
-
   void _signInWithPhoneNumber() async {
+    //타이머가 유효하다면
     if (_timer.isActive) {
       try {
         final credential = PhoneAuthProvider.credential(
@@ -238,6 +205,7 @@ class _PhoneAuthState extends State<PhoneAuth> {
           setState(() {
             _phoneAuth = true;
             _isCodeSent = false;
+            us.registerPhone.value = _formatPhoneNumber(_phoneController.text);
             showOnlyConfirmTapDialog(context, '인증완료', "인증이 완료되었습니다.", () {
               Get.to(() => RegisterPage())?.then((value) {
                 Get.back();

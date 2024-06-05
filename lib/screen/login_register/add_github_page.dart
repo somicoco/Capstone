@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
+import '../../provider/user_state.dart';
 import '../../util/font/font.dart';
 
 class AddGithubPage extends StatefulWidget {
@@ -14,22 +15,12 @@ class AddGithubPage extends StatefulWidget {
 }
 
 class _AddGithubPageState extends State<AddGithubPage> {
+  final us = Get.put(UserState());
   TextEditingController githubController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('깃허브 등록',
-          style: f22bw500,),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1), // Divider의 높이 설정
-          child: Divider(
-            color: Color(0xffEBEBEB), // Divider의 색상 설정
-            height: 1, // Divider의 높이 설정
-            thickness: 1, // Divider의 두께 설정
-          ),
-        ),
-      ),
+      appBar: StyledAppBar(text: '깃허브 등록',),
       body: Padding(
         padding: EdgeInsets.only(top: 28,left:12, right: 12,bottom: 100),
         child: Column(
@@ -84,6 +75,9 @@ class _AddGithubPageState extends State<AddGithubPage> {
             Spacer(),
             GestureDetector(
               onTap: (){
+                us.gitUrl.value = githubController.text;
+                print('깃허브 url??');
+                print(us.gitUrl.value);
                 Get.to(AddBlogPage());
                 setState(() {
 

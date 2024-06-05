@@ -69,6 +69,7 @@ class suffixTextFormBox extends StatelessWidget {
   final Color? backgroundColor;
   final VoidCallback? onpressed;
   final TextInputType? keyboardType;
+  final bool enabled;
 
   const suffixTextFormBox(
       {Key? key,
@@ -76,6 +77,7 @@ class suffixTextFormBox extends StatelessWidget {
       required this.textController,
       required this.onTap,
       required this.onChange,
+      this.enabled = true,
       this.isText = false,
       this.isIcon = false,
       this.isContainer = false,
@@ -93,6 +95,7 @@ class suffixTextFormBox extends StatelessWidget {
     return TextFormField(
       obscureText: !visible!,
       keyboardType: keyboardType ?? TextInputType.text,
+      enabled: enabled,
       decoration: InputDecoration(
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6),
@@ -108,10 +111,7 @@ class suffixTextFormBox extends StatelessWidget {
         suffixIcon: suffixText != null
             ? Padding(
                 padding: const EdgeInsets.symmetric(vertical: 15),
-                child: Text(
-                  suffixText!,
-                  style: f14rw500
-                ),
+                child: Text(suffixText!, style: f14rw500),
               )
             : isIcon
                 ? visible
@@ -200,10 +200,10 @@ class IconText extends StatelessWidget {
           Text(
             '${text}',
             style: TextStyle(
-                fontSize: isLarge?13:9,
+              fontSize: isLarge ? 13 : 9,
               fontFamily: 'NotoSans',
-            ),)
-
+            ),
+          )
         ],
       ),
     );
@@ -384,6 +384,7 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String text;
 
   StyledAppBar({required this.text});
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -409,7 +410,7 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }
 
-class StudyInfo{
+class StudyInfo {
   String studyName;
   String studyCategory;
   String studyLocation;
@@ -418,7 +419,8 @@ class StudyInfo{
   int members;
   int views;
 
-  StudyInfo(this.studyName, this.studyCategory, this.studyLocation, this.studyIntro, this.tags,this.members, this.views);
+  StudyInfo(this.studyName, this.studyCategory, this.studyLocation,
+      this.studyIntro, this.tags, this.members, this.views);
 }
 
 class Message {
@@ -426,11 +428,11 @@ class Message {
   final String userId;
   final bool isUserMessage;
 
-
-  Message(this.text, this.isUserMessage,this.userId);
+  Message(this.text, this.isUserMessage, this.userId);
 }
 
-class PostInfo { // 게시글 정보
+class PostInfo {
+  // 게시글 정보
   String title; // 제목
   String content; // 내용
   String writingTime; // 글 작성시간
@@ -441,178 +443,198 @@ class PostInfo { // 게시글 정보
   bool like; // 좋아요 상태
   List<String> imageList;
 
-  PostInfo(this.title, this.content, this.writingTime, this.category, this.hits, this.commentCount,
-      this.likeCount, this.like, [this.imageList = const []]);
+  PostInfo(this.title, this.content, this.writingTime, this.category, this.hits,
+      this.commentCount, this.likeCount, this.like,
+      [this.imageList = const []]);
 }
 
 class PostItem extends StatelessWidget {
   final PostInfo postInfo;
   final VoidCallback onHeartTap;
 
-  const PostItem({Key? key,  required this.postInfo, required this.onHeartTap})
+  const PostItem({Key? key, required this.postInfo, required this.onHeartTap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return
-      GestureDetector(
-        onTap: (){
-          Get.to(PostViewPage(postInfo: postInfo));
-        },
-        child:
-        Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 15, top: 26, bottom: 10),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    child: Row(
-                      children: [
-                        ClipOval(
-                          child: Container(
-                            height: 30,
+    return GestureDetector(
+      onTap: () {
+        Get.to(PostViewPage(postInfo: postInfo));
+      },
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: 15, top: 26, bottom: 10),
+            child: Row(
+              children: [
+                GestureDetector(
+                  child: Row(
+                    children: [
+                      ClipOval(
+                        child: Container(
+                          height: 30,
+                          width: 30,
+                          child: Image.asset(
+                            'assets/image/example/profile_pic.png',
+                            fit: BoxFit.cover,
                             width: 30,
-                            child: Image.asset(
-                              'assets/image/example/profile_pic.png',
-                              fit: BoxFit.cover,
-                              width: 30,
-                              height: 30,
-                            ),
+                            height: 30,
                           ),
                         ),
-                        SizedBox(width: 8),
-                        Text(
-                          '둘리',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontFamily: 'NotoSans',
-                            fontSize: 12,
-                          ),
-                        )
-                      ],
-                    ),
-                    onTap: () {
-                      Get.to(UserProfilePage());
-                    },
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        '둘리',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontFamily: 'NotoSans',
+                          fontSize: 12,
+                        ),
+                      )
+                    ],
                   ),
-                  Spacer(),
-                  Text(
-                    postInfo.writingTime,
+                  onTap: () {
+                    Get.to(UserProfilePage());
+                  },
+                ),
+                Spacer(),
+                Text(
+                  postInfo.writingTime,
+                  style: TextStyle(
+                      fontSize: 8,
+                      color: Color(0xffABABAB),
+                      fontFamily: 'NotoSans',
+                      fontWeight: FontWeight.w500),
+                ),
+                SizedBox(width: 1), // 너무 가까워보임
+                Text('조회수 ${postInfo.hits}',
                     style: TextStyle(
                         fontSize: 8,
                         color: Color(0xffABABAB),
                         fontFamily: 'NotoSans',
-                        fontWeight: FontWeight.w500),
-                  ),
-                  SizedBox(width: 1), // 너무 가까워보임
-                  Text('조회수 ${postInfo.hits}',
-                      style: TextStyle(
-                          fontSize: 8,
-                          color: Color(0xffABABAB),
-                          fontFamily: 'NotoSans',
-                          fontWeight: FontWeight.w500)),
-                  SizedBox(width: 32),
-                ],
-              ),
-            ),
-            Row(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(left: 14),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        child: Text(
-                          postInfo.title,
-                          maxLines: null,
-                          overflow: TextOverflow.visible,
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, fontFamily: 'NotoSans'),
-                        ),
-                        width: MediaQuery.of(context).size.width / 1.5,
-                      ),
-                      Text(
-                        postInfo.content,
-                        maxLines: null,
-                        overflow: TextOverflow.visible,
-                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, fontFamily: 'NotoSans'),
-                      ),
-                      const SizedBox(height: 4),
-                      postInfo.imageList.length > 0 ?
-                      Stack(
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width - 28, // 여기 부분 수정해야함
-                            height: 220,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(6)),
-                            child: Image.asset(
-                              postInfo.imageList[0],
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          postInfo.imageList.length > 1 ?
-                          Positioned(
-                            top: 7,
-                            right: 7,
-                            child: Container(
-                                width: 29,
-                                height: 26,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(30),
-                                    color: Color(0xff7E889C)),
-                                child: Center(
-                                  child: Text('${postInfo.imageList.length}',
-                                      style: TextStyle(
-                                          fontSize: 12, color: Colors.white, fontFamily: 'NotoSans', fontWeight: FontWeight.w700)),
-                                )),
-                          ) : SizedBox()
-                        ],
-                      ) : SizedBox()
-                    ],
-                  ),
-                )
+                        fontWeight: FontWeight.w500)),
+                SizedBox(width: 32),
               ],
             ),
-            SizedBox(
-              height: 23,
-            ),
-            _ThinBottomLine(),
-            Padding(
-              padding: EdgeInsets.only(left: 21, top: 11, bottom: 16),
-              // 위 아래 12하면 가운데
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: onHeartTap,
-                    child: SvgPicture.asset(postInfo.like
-                        ? 'assets/icon/Heart.svg'
-                        : 'assets/icon/emptyHeart.svg'),
-                  ),
-                  const SizedBox(width: 5),
-                  Text('${postInfo.likeCount}',
-                      style: TextStyle(fontFamily: 'Bold', fontSize: 12, fontWeight: FontWeight.w700)),
-                  const SizedBox(width: 6),
-                  SvgPicture.asset('assets/icon/chat.svg'),
-                  const SizedBox(width: 5),
-                  Text('${postInfo.commentCount}',
-                      style: TextStyle(fontFamily: 'NotoSans', fontSize: 12, fontWeight: FontWeight.w700)),
-                  Spacer(),
-                  Text(postInfo.category,
+          ),
+          Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: 14),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      child: Text(
+                        postInfo.title,
+                        maxLines: null,
+                        overflow: TextOverflow.visible,
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'NotoSans'),
+                      ),
+                      width: MediaQuery.of(context).size.width / 1.5,
+                    ),
+                    Text(
+                      postInfo.content,
+                      maxLines: null,
+                      overflow: TextOverflow.visible,
                       style: TextStyle(
-                          fontSize: 10,
-                          fontFamily: 'NotoSans',
+                          fontSize: 13,
                           fontWeight: FontWeight.w500,
-                          color: Color(0xffABABAB))),
-                  const SizedBox(width: 29),
-                ],
-              ),
+                          fontFamily: 'NotoSans'),
+                    ),
+                    const SizedBox(height: 4),
+                    postInfo.imageList.length > 0
+                        ? Stack(
+                            children: [
+                              Container(
+                                width: MediaQuery.of(context).size.width -
+                                    28, // 여기 부분 수정해야함
+                                height: 220,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(6)),
+                                child: Image.asset(
+                                  postInfo.imageList[0],
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              postInfo.imageList.length > 1
+                                  ? Positioned(
+                                      top: 7,
+                                      right: 7,
+                                      child: Container(
+                                          width: 29,
+                                          height: 26,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
+                                              color: Color(0xff7E889C)),
+                                          child: Center(
+                                            child: Text(
+                                                '${postInfo.imageList.length}',
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: Colors.white,
+                                                    fontFamily: 'NotoSans',
+                                                    fontWeight:
+                                                        FontWeight.w700)),
+                                          )),
+                                    )
+                                  : SizedBox()
+                            ],
+                          )
+                        : SizedBox()
+                  ],
+                ),
+              )
+            ],
+          ),
+          SizedBox(
+            height: 23,
+          ),
+          _ThinBottomLine(),
+          Padding(
+            padding: EdgeInsets.only(left: 21, top: 11, bottom: 16),
+            // 위 아래 12하면 가운데
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: onHeartTap,
+                  child: SvgPicture.asset(postInfo.like
+                      ? 'assets/icon/Heart.svg'
+                      : 'assets/icon/emptyHeart.svg'),
+                ),
+                const SizedBox(width: 5),
+                Text('${postInfo.likeCount}',
+                    style: TextStyle(
+                        fontFamily: 'Bold',
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700)),
+                const SizedBox(width: 6),
+                SvgPicture.asset('assets/icon/chat.svg'),
+                const SizedBox(width: 5),
+                Text('${postInfo.commentCount}',
+                    style: TextStyle(
+                        fontFamily: 'NotoSans',
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700)),
+                Spacer(),
+                Text(postInfo.category,
+                    style: TextStyle(
+                        fontSize: 10,
+                        fontFamily: 'NotoSans',
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xffABABAB))),
+                const SizedBox(width: 29),
+              ],
             ),
-            _ThickBottomLine()
-          ],
-        ),
-      );
+          ),
+          _ThickBottomLine()
+        ],
+      ),
+    );
   }
 
   Widget _ThinBottomLine() {
@@ -640,7 +662,7 @@ class noticeItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         Get.to(PostViewPage(postInfo: postInfo));
       },
       child: Padding(
@@ -683,25 +705,25 @@ class tabCategory extends StatelessWidget {
   Widget build(BuildContext context) {
     return Tab(
         child: Row(
-          children: [
-            Container(
-              width: 24,
-              height: 24,
-              child: SvgPicture.asset(tabImage),
-            ),
-            const SizedBox(width: 5),
-            Text(tabName, style: f9bw700)
-          ],
-        ));
+      children: [
+        Container(
+          width: 24,
+          height: 24,
+          child: SvgPicture.asset(tabImage),
+        ),
+        const SizedBox(width: 5),
+        Text(tabName, style: f9bw700)
+      ],
+    ));
   }
 }
 
-class DecoratedTabBar extends StatelessWidget implements PreferredSizeWidget { //탭바 색깔 조정
+class DecoratedTabBar extends StatelessWidget implements PreferredSizeWidget {
+  //탭바 색깔 조정
   final TabBar tabBar;
   final BoxDecoration decoration;
 
   DecoratedTabBar({required this.tabBar, required this.decoration});
-
 
   @override
   Size get preferredSize => tabBar.preferredSize;
@@ -716,4 +738,3 @@ class DecoratedTabBar extends StatelessWidget implements PreferredSizeWidget { /
     );
   }
 }
-

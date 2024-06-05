@@ -1,14 +1,17 @@
 
 import 'package:circlet/components/components.dart';
+import 'package:circlet/dialog/dialog.dart';
 import 'package:circlet/screen/login_register/id_password_search/id_search_page.dart';
 import 'package:circlet/screen/login_register/id_password_search/password_search_page.dart';
 import 'package:circlet/screen/login_register/register/phone_auth.dart';
-import 'package:circlet/screen/main/study_search_page.dart';
+import 'package:circlet/screen/main/bottom_navigator.dart';
 import 'package:circlet/util/color.dart';
 import 'package:circlet/util/font/font.dart';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../firebase/firebase_user.dart';
+import '../../../provider/user_state.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -22,6 +25,8 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool passwordVisible = false;
+
+  final us = Get.put(UserState());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,11 +89,20 @@ class _LoginPageState extends State<LoginPage> {
             height: 30,
           ),
           GestureDetector(
-            onTap: (){
-              setState(() {
-                Get.to(TestSearchPage());
+            onTap: () async {
+              await Login(emailController.text, passwordController.text);
+              if(us.userList.length!=0){
+                print('userList의 값들은??');
+                print(us.userList.value);
+                Get.to(BottomNavigator());
+              }
+              else{
+                showConfirmTapDialog(context, '아이디 또는 비밀번호가 일치하지 않습니다.', () {
+                  Get.back();
+                });
+              }
 
-              });
+
             },
             child: Container(
               height: 46,

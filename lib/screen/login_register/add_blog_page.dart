@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 import '../../components/components.dart';
+import '../../provider/user_state.dart';
 import '../../util/font/font.dart';
 
 class AddBlogPage extends StatefulWidget {
@@ -14,21 +15,13 @@ class AddBlogPage extends StatefulWidget {
 }
 
 class _AddBlogPageState extends State<AddBlogPage> {
+  final us = Get.put(UserState());
   TextEditingController blogController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('블로그 등록1234',
-          style: f22bw500,),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1), // Divider의 높이 설정
-          child: Divider(
-            color: Color(0xffEBEBEB), // Divider의 색상 설정
-            height: 1, // Divider의 높이 설정
-            thickness: 1, // Divider의 두께 설정
-          ),
-        ),
+      appBar: StyledAppBar(
+        text: '블로그 등록',
       ),
       body: Padding(
         padding: EdgeInsets.only(top: 28, left: 12, right: 12, bottom: 100),
@@ -75,6 +68,9 @@ class _AddBlogPageState extends State<AddBlogPage> {
             Spacer(),
             GestureDetector(
               onTap: () {
+                us.blogUrl.value = blogController.text;
+                print('blogUrl url??');
+                print(us.blogUrl.value);
                 Get.to(AddPortFolioPage());
                 setState(() {
 
