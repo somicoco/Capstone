@@ -77,7 +77,7 @@ class _SearchCategoryPageState extends State<SearchCategoryPage>
     }
   }
 
-  PostInfo postinfo = PostInfo('','','', '', 8, 0, 0, false);
+  PostInfo postinfo = PostInfo(id: '12',content: '', title: '', date: '', category: '', imagePaths: []);
 
   @override
   Widget build(BuildContext context) {

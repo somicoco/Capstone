@@ -1,21 +1,22 @@
 import 'package:circlet/components/components.dart';
+import 'package:circlet/screen/post/post_image_page.dart';
 import 'package:circlet/util/font/font.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class PostViewPage extends StatefulWidget {
   @override
   State<PostViewPage> createState() => _PostViewPageState();
 
-  PostInfo postInfo;
+  final PostInfo postInfo;
 
   PostViewPage({required this.postInfo});
 }
 
 class _PostViewPageState extends State<PostViewPage> {
   final PageController controller = PageController();
-  final int pageCount = 4;
   int currentPage = 0;
 
   TextEditingController textEditingController = TextEditingController();
@@ -32,8 +33,8 @@ class _PostViewPageState extends State<PostViewPage> {
     });
   }
 
-  void sendComment(){
-    if(textEditingController.text.isNotEmpty)
+  void sendComment() {
+    if (textEditingController.text.isNotEmpty)
       setState(() {
         comments.add(textEditingController.text);
       });
@@ -120,7 +121,7 @@ class _PostViewPageState extends State<PostViewPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '둘리둘리',
+                        '둘리',
                         style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
@@ -130,7 +131,7 @@ class _PostViewPageState extends State<PostViewPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            '2024년 2월 14일 오전 11:48',
+                            widget.postInfo.date, // formattedDate 사용
                             style: TextStyle(
                                 fontSize: 8,
                                 color: Color(0xffABABAB),
@@ -139,7 +140,7 @@ class _PostViewPageState extends State<PostViewPage> {
                           ),
                           const SizedBox(width: 1),
                           Text(
-                            '조회수 ${widget.postInfo.hits}',
+                            '조회수 ${widget.postInfo.viewCount}',
                             style: TextStyle(
                                 fontSize: 8,
                                 color: Color(0xffABABAB),
@@ -165,7 +166,6 @@ class _PostViewPageState extends State<PostViewPage> {
                 ],
               ),
             ),
-
             Padding(
               padding: EdgeInsets.only(left: 15, right: 15),
               child: Column(
@@ -182,12 +182,12 @@ class _PostViewPageState extends State<PostViewPage> {
               ),
             ),
             const SizedBox(height: 12),
-            widget.postInfo.imageList.length  > 0 ?
-            Container(
+            widget.postInfo.imagePaths.isNotEmpty
+                ? Container(
               height: 240,
               child: PageView.builder(
                 controller: controller,
-                itemCount: widget.postInfo.imageList.length,
+                itemCount: widget.postInfo.imagePaths.length,
                 itemBuilder: (context, index) => Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(6),
@@ -196,44 +196,53 @@ class _PostViewPageState extends State<PostViewPage> {
                       children: [
                         Padding(
                           padding: EdgeInsets.only(left: 14, right: 14),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: 220,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Image.asset(
-                              widget.postInfo.imageList[index],
-                              fit: BoxFit.cover,
+                          child: GestureDetector(
+                            onTap: () {
+                              Get.to(PostImagePage(postInfo: widget.postInfo));
+                            },
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: 220,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Image.network(
+                                widget.postInfo.imagePaths[index],
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ),
-                        Container(
-                          margin: EdgeInsets.only(
-                              left: MediaQuery.of(context).size.width / 2.3,
-                              top: 210),
-                          child: SmoothPageIndicator(
-                              controller: controller,
-                              count: widget.postInfo.imageList.length,
-                              effect: WormEffect(
-                                  activeDotColor: Colors.white,
-                                  dotWidth: 6,
-                                  dotHeight: 6)),
-                        )
+                        if (widget.postInfo.imagePaths.length > 1)
+                          Container(
+                            margin: EdgeInsets.only(
+                                left: MediaQuery.of(context).size.width / 2.3,
+                                top: 210),
+                            child: SmoothPageIndicator(
+                                controller: controller,
+                                count: widget.postInfo.imagePaths.length,
+                                effect: WormEffect(
+                                    activeDotColor: Colors.white,
+                                    dotWidth: 6,
+                                    dotHeight: 6)),
+                          )
                       ],
                     )),
               ),
-            ) : SizedBox(),
+            )
+                : SizedBox(),
             SingleChildScrollView(
               child: Container(
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 13, right: 13),
-                    child: Text(
-                        widget.postInfo.content,
-                        style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'NotoSans')),
-                  )),
+                child: Padding(
+                  padding: EdgeInsets.only(left: 13, right: 13),
+                  child: Text(
+                    widget.postInfo.content,
+                    style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: 'NotoSans'),
+                  ),
+                ),
+              ),
             ),
             SizedBox(
               height: 67,
@@ -278,9 +287,13 @@ class _PostViewPageState extends State<PostViewPage> {
               thickness: 10,
             ),
             const SizedBox(height: 2),
-            for(int i =0; i<comments.length; i++)
-              CommentWidget(avatarImagePath: 'assets/image/example/profile_pic.png', userName: '둘리', comment: comments[i], time: '2024년 2월 14일 오후 1:20' )
-
+            for (int i = 0; i < comments.length; i++)
+              CommentWidget(
+                avatarImagePath: 'assets/image/example/profile_pic.png',
+                userName: '둘리',
+                comment: comments[i],
+                time: '2024년 2월 14일 오후 1:20',
+              )
           ],
         ),
       ),
@@ -299,8 +312,11 @@ class _PostViewPageState extends State<PostViewPage> {
                   controller: textEditingController,
                   decoration: InputDecoration(
                     hintText: '댓글 달기...',
-                    hintStyle:
-                    TextStyle(fontSize: 10, color: Color(0xff838383), fontWeight: FontWeight.w500, fontFamily: 'NotoSans'),
+                    hintStyle: TextStyle(
+                        fontSize: 10,
+                        color: Color(0xff838383),
+                        fontWeight: FontWeight.w500,
+                        fontFamily: 'NotoSans'),
                     border: OutlineInputBorder(borderSide: BorderSide.none),
                     contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
                   ),
@@ -324,7 +340,11 @@ class _PostViewPageState extends State<PostViewPage> {
                 child: Center(
                   child: Text(
                     '등록',
-                    style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w500, fontFamily: 'NotoSans'),
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: 'NotoSans'),
                   ),
                 ),
               ),
@@ -336,14 +356,11 @@ class _PostViewPageState extends State<PostViewPage> {
   }
 }
 
-
-
 class CommentWidget extends StatelessWidget {
-  String avatarImagePath;
-  String userName;
-  String comment;
-  String time;
-
+  final String avatarImagePath;
+  final String userName;
+  final String comment;
+  final String time;
 
   CommentWidget({
     required this.avatarImagePath,

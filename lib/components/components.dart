@@ -1,11 +1,14 @@
+import 'dart:io';
 import 'package:circlet/screen/post/post_view_page.dart';
 import 'package:circlet/screen/profile/user/user_profile_page.dart';
 import 'package:circlet/util/font/font.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
 
 import '../util/color.dart';
 
@@ -432,20 +435,29 @@ class Message {
 }
 
 class PostInfo {
-  // 게시글 정보
-  String title; // 제목
-  String content; // 내용
-  String writingTime; // 글 작성시간
+  String id;
+  String title;
+  String content;
+  String date;
   String category;
-  int hits; // 조회수
-  int commentCount; // 댓글 수
-  int likeCount; // 좋아요 수
-  bool like; // 좋아요 상태
-  List<String> imageList;
+  int likeCount;
+  int commentCount;
+  int viewCount;
+  bool like;
+  List<String> imagePaths;
 
-  PostInfo(this.title, this.content, this.writingTime, this.category, this.hits,
-      this.commentCount, this.likeCount, this.like,
-      [this.imageList = const []]);
+  PostInfo({
+    required this.id,
+    required this.title,
+    required this.content,
+    required this.date,
+    required this.category,
+    this.likeCount = 0,
+    this.commentCount = 0,
+    this.viewCount = 0,
+    this.like = false,
+    required this.imagePaths,
+  }) ;
 }
 
 class PostItem extends StatelessWidget {
@@ -454,6 +466,9 @@ class PostItem extends StatelessWidget {
 
   const PostItem({Key? key, required this.postInfo, required this.onHeartTap})
       : super(key: key);
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -499,7 +514,7 @@ class PostItem extends StatelessWidget {
                 ),
                 Spacer(),
                 Text(
-                  postInfo.writingTime,
+                  postInfo.date as String,
                   style: TextStyle(
                       fontSize: 8,
                       color: Color(0xffABABAB),
@@ -507,7 +522,7 @@ class PostItem extends StatelessWidget {
                       fontWeight: FontWeight.w500),
                 ),
                 SizedBox(width: 1), // 너무 가까워보임
-                Text('조회수 ${postInfo.hits}',
+                Text('조회수 ${postInfo.viewCount}',
                     style: TextStyle(
                         fontSize: 8,
                         color: Color(0xffABABAB),
@@ -536,17 +551,20 @@ class PostItem extends StatelessWidget {
                       ),
                       width: MediaQuery.of(context).size.width / 1.5,
                     ),
-                    Text(
-                      postInfo.content,
-                      maxLines: null,
-                      overflow: TextOverflow.visible,
-                      style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                          fontFamily: 'NotoSans'),
+                    Padding(
+                      padding: EdgeInsets.only(left: 2),
+                      child: Text(
+                        postInfo.content,
+                        maxLines: null,
+                        overflow: TextOverflow.visible,
+                        style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'NotoSans'),
+                      ),
                     ),
                     const SizedBox(height: 4),
-                    postInfo.imageList.length > 0
+                    postInfo.imagePaths.length > 0
                         ? Stack(
                             children: [
                               Container(
@@ -555,12 +573,12 @@ class PostItem extends StatelessWidget {
                                 height: 220,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(6)),
-                                child: Image.asset(
-                                  postInfo.imageList[0],
+                                child: Image.network(
+                                  postInfo.imagePaths[0],
                                   fit: BoxFit.cover,
                                 ),
                               ),
-                              postInfo.imageList.length > 1
+                              postInfo.imagePaths.length > 1
                                   ? Positioned(
                                       top: 7,
                                       right: 7,
@@ -573,7 +591,7 @@ class PostItem extends StatelessWidget {
                                               color: Color(0xff7E889C)),
                                           child: Center(
                                             child: Text(
-                                                '${postInfo.imageList.length}',
+                                                '${postInfo.imagePaths.length}',
                                                 style: TextStyle(
                                                     fontSize: 12,
                                                     color: Colors.white,
@@ -659,8 +677,17 @@ class noticeItem extends StatelessWidget {
 
   noticeItem({required this.postInfo});
 
+  String _text(String title) {
+    if (title.length > 10) {
+      return title.substring(0, 10) + '...';
+    } else {
+      return title;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+
     return GestureDetector(
       onTap: () {
         Get.to(PostViewPage(postInfo: postInfo));
@@ -677,21 +704,22 @@ class noticeItem extends StatelessWidget {
                     color: Color(0xff3648EB)),
                 child: Center(
                   child: Text(
-                    postInfo.category,
+                    '공지',
                     style: f10w700,
                   ),
                 ),
               ),
               Padding(
                 padding: EdgeInsets.only(left: 12),
-                child: Text(postInfo.title, style: f12bw700),
+                child: Text(_text(postInfo.title), style: f12bw700),
               ),
               Spacer(),
-              Text(postInfo.writingTime, style: f8gw500),
+              Text(postInfo.date as String, style: f8gw500),
             ],
           )),
     );
   }
+
 }
 
 class tabCategory extends StatelessWidget {
