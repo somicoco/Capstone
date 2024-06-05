@@ -1,9 +1,12 @@
 import 'package:circlet/components/components.dart';
+import 'package:circlet/dialog/dialog.dart';
 import 'package:circlet/screen/login_register/tech_stack_page.dart';
 import 'package:circlet/util/font/font.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+
+import '../../provider/user_state.dart';
 
 class InterestPage extends StatefulWidget {
   const InterestPage({super.key});
@@ -13,6 +16,7 @@ class InterestPage extends StatefulWidget {
 }
 
 class _InterestPageState extends State<InterestPage> {
+  final us = Get.put(UserState());
 
   List iconList = [
     'assets/icon/apple.svg',
@@ -98,7 +102,25 @@ class _InterestPageState extends State<InterestPage> {
               ),
               GestureDetector(
                 onTap: (){
-                  clickList.any((element) => element == true)?Get.to(TechStackPage()):print('342342');
+                  if(clickList.any((element) => element == true)){
+                    List<String> filteredList = [];
+                    for (int i = 0; i < clickList.length; i++) {
+                      if (clickList[i]) {
+                        filteredList.add(iconNameList[i]);
+                      }
+                    }
+                    us.interest.value = filteredList;
+                    print('doc???');
+                    print(us.userDocId.value);
+                    print('interest???');
+                    print(us.interest.value);
+                    Get.to(TechStackPage());
+                  }else{
+                    showConfirmTapDialog(context, '반드시 하나 이상의 관심분야를 선택해주세요', () {
+                      Get.back();
+                    });
+
+                  }
 
                   setState(() {
 

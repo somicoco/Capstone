@@ -1,6 +1,12 @@
+import 'package:circlet/screen/cafe/cafe_main.dart';
 import 'package:circlet/screen/login_register/add_github_page.dart';
 import 'package:circlet/screen/login_register/add_portfolio_page.dart';
+import 'package:circlet/screen/login_register/interest_page.dart';
 import 'package:circlet/screen/login_register/login/login_page.dart';
+import 'package:circlet/screen/lounge/lounge_page.dart';
+import 'package:circlet/screen/profile/user/user_profile_page.dart';
+import 'package:circlet/screen/study/study_chat_page.dart';
+import 'package:circlet/screen/study/study_home/study_search_page.dart';
 import 'package:circlet/util/color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -22,9 +28,10 @@ class _BottomNavigatorState extends State<BottomNavigator> with TickerProviderSt
 
   @override
   void initState() {
+    print('dasdas');
     super.initState();
-    _widgetOptions = [LoginPage(),AddGithubPage(),AddPortFolioPage(),LoginPage()];
-    _bottomTabController = TabController(length: 5, vsync: this);
+    _widgetOptions = [StudySearchPage(),CafeMain(),LoungePage(),UserProfilePage(),UserProfilePage()];
+    _bottomTabController = TabController(length: 5, vsync: this,initialIndex: 0);
     _currentIndex = 0;
     setState(() {});
     // _bottomTabController.animateTo(0);
@@ -33,7 +40,11 @@ class _BottomNavigatorState extends State<BottomNavigator> with TickerProviderSt
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Text(''),
+      body: TabBarView(
+        physics: const NeverScrollableScrollPhysics(),
+        children: _widgetOptions,
+        controller: _bottomTabController,
+      ),
       bottomNavigationBar: Container(
         height: 100,
         decoration: BoxDecoration(
@@ -45,8 +56,6 @@ class _BottomNavigatorState extends State<BottomNavigator> with TickerProviderSt
           onTap: (index){
             setState(() {
               _currentIndex = index;
-
-              Get.to(()=> _widgetOptions[_currentIndex]);
             });
           },
           indicatorColor: mainColor,
@@ -56,7 +65,6 @@ class _BottomNavigatorState extends State<BottomNavigator> with TickerProviderSt
           labelStyle: TextStyle(fontSize: 8,fontFamily: 'NotoSans'),
           unselectedLabelColor: Colors.grey,
           labelColor: const Color(0xff3D6177),
-
           tabs: <Widget>[
             GestureDetector(
               onTap: ()async{},
@@ -67,7 +75,6 @@ class _BottomNavigatorState extends State<BottomNavigator> with TickerProviderSt
                   height: 24,
                 ),
                 text: '스터디',
-
               ),
             ),
             Tab(

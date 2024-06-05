@@ -72,6 +72,7 @@ class suffixTextFormBox extends StatelessWidget {
   final Color? backgroundColor;
   final VoidCallback? onpressed;
   final TextInputType? keyboardType;
+  final bool enabled;
 
   const suffixTextFormBox(
       {Key? key,
@@ -79,6 +80,7 @@ class suffixTextFormBox extends StatelessWidget {
       required this.textController,
       required this.onTap,
       required this.onChange,
+      this.enabled = true,
       this.isText = false,
       this.isIcon = false,
       this.isContainer = false,
@@ -96,6 +98,7 @@ class suffixTextFormBox extends StatelessWidget {
     return TextFormField(
       obscureText: !visible!,
       keyboardType: keyboardType ?? TextInputType.text,
+      enabled: enabled,
       decoration: InputDecoration(
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6),

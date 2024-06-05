@@ -88,6 +88,12 @@ const TextStyle f14bw400 = TextStyle(
     fontWeight: FontWeight.w400,
     fontFamily: 'NotoSans'
 );
+const TextStyle f14w400 = TextStyle(
+    fontSize: 14,
+    color: whiteColor,
+    fontWeight: FontWeight.w400,
+    fontFamily: 'NotoSans'
+);
 const TextStyle f14mw400 = TextStyle(
     fontSize: 14,
     color: mainColor,

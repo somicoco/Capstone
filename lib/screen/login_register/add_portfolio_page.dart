@@ -1,10 +1,14 @@
-import 'package:circlet/screen/main/study_search_page.dart';
+import 'dart:io';
 import 'package:circlet/util/color.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
+import '../../provider/user_state.dart';
 import '../../util/font/font.dart';
 
 class AddPortFolioPage extends StatefulWidget {
@@ -15,6 +19,10 @@ class AddPortFolioPage extends StatefulWidget {
 }
 
 class _AddPortFolioPageState extends State<AddPortFolioPage> {
+  final us = Get.put(UserState());
+  File? selectedFile;
+  String? selectedFileName;
+  String? fileName;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,30 +79,37 @@ class _AddPortFolioPageState extends State<AddPortFolioPage> {
                     color: darkGrayColor,
                     borderRadius: BorderRadius.circular(5)
                 ),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(
-                      'assets/icon/file.svg',
-                      width: 20,
-                      height: 20,
-                    ),
-                    Spacer(),
-                    Text(
-                      '파일등록',
-                      style: TextStyle(
-                          color: Color(0xffFFFFFF)
-                          , fontSize: 18),
-                    ),
-                  ],
+                child: GestureDetector(
+                  onTap: (){
+                    openPdfFile();
+                  },
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/icon/file.svg',
+                        width: 20,
+                        height: 20,
+                      ),
+                      Spacer(),
+                      Text(
+                        '파일등록',
+                        style: TextStyle(
+                            color: Color(0xffFFFFFF)
+                            , fontSize: 18),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
+            selectedFileName!=null? Text(selectedFileName!):Container(),
             Spacer(
 
             ),
             GestureDetector(
-              onTap: () {
-                Get.to(TestSearchPage());
+              onTap: () async {
+                await firebaseAdd();
+                //Get.to(TestSearchPage());
                 setState(() {
 
                 });
@@ -122,5 +137,61 @@ class _AddPortFolioPageState extends State<AddPortFolioPage> {
         ),
       ),
     );
+  }
+  void openPdfFile() async{
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf']
+    );
+
+    if(result != null){
+      selectedFile= File(result.files.single.path.toString());
+      selectedFileName = result.files.first.name;
+      print(selectedFile);
+      print(selectedFileName);
+      setState(() {
+
+      });
+    }
+}
+  Future<void> firebaseAdd ()async{
+    await storageAdd();
+    CollectionReference ref = FirebaseFirestore.instance.collection('userDetail');
+    await ref.add({
+      'createDate' : '${DateTime.now()}',
+      'docId': '',
+      'userId' : us.userDocId.value,
+      'interest' : us.interest.value,
+      'techStack' : us.techStack.value,
+      'introduce' : '',
+      'gitUrl' : us.gitUrl.value,
+      'blogUrl' : us.blogUrl.value
+    }).then((doc){
+      ref.doc(doc.id).update({'docId':doc.id});
+    });
+  }
+  Future<void> storageAdd ()async{
+    if (selectedFile != null) {
+        fileName = us.userDocId.value;
+        print('버튼눌르므ㅡ');
+        //String now = '${DateTime.now()}';
+        File file = selectedFile!;
+        try {
+          await FirebaseStorage.instance.ref("portfolio/${fileName}").putFile(file);
+          print("파일 업로드 완료");
+        } catch (e) {
+          print("파일 업로드 에러: $e");
+        }
+    } else {
+      print("선택된 파일 없음");
+    }
+  }
+
+  String _truncateText(String text, int maxLength) {
+    if (text.length <= maxLength) {
+      return text;
+    } else {
+      return text.substring(0, 10) + '...';
+    }
   }
 }
